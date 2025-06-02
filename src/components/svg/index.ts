@@ -1,0 +1,9 @@
+export { default as Activities } from "./icons/activities.svg";
+export { default as Budgets } from "./icons/budgets.svg";
+export { default as Chat } from "./icons/chat.svg";
+export { default as Clients } from "./icons/clients.svg";
+export { default as Dashboard } from "./icons/dashboard.svg";
+export { default as Finance } from "./icons/finance.svg";
+export { default as Objectives } from "./icons/objectives.svg";
+export { default as Projects } from "./icons/projects.svg";
+export { default as Revenue } from "./icons/revenue.svg";

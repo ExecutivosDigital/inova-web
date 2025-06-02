@@ -1,0 +1,196 @@
+"use client";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+// avatar
+
+import { CustomPagination } from "@/components/ui/custom-pagination";
+import { cn } from "@/lib/utils";
+import { Eye, LayersIcon, Search } from "lucide-react";
+import { useState } from "react";
+import CreateClient from "./CreateClient";
+
+const TableWithCards = () => {
+  const columns = [
+    { key: "name", label: "Nome Comercial" },
+    { key: "code", label: "Código" },
+    { key: "type", label: "Tipo" },
+    { key: "maker", label: "Fabricante" },
+    { key: "volume", label: "Volume" },
+    { key: "amount", label: "Estoque" },
+    { key: "packaging", label: "Embalagem" },
+    { key: "minimum", label: "Mínimo" },
+    { key: "status", label: "Status" },
+    { key: "actions", label: "Ações" },
+  ];
+
+  const transactions = [
+    {
+      id: 1,
+      name: "Graxa Alta Temp. 500",
+      code: "123456-A",
+      type: "Graxa",
+      maker: "Mobil",
+      volume: "18Kg",
+      amount: "42",
+      packaging: "Garrafas",
+      minimum: "20",
+      status: "Normal",
+    },
+  ];
+
+  const [openClientBoard, setOpenClientBoard] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("Todos");
+  const [materialPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const closeCreateClientBoard = () => {
+    setOpenClientBoard(false);
+  };
+
+  return (
+    <>
+      <Card className="h-full overflow-hidden">
+        <div className="flex h-40 w-full items-center justify-center bg-[url('/static/materials-header.png')] bg-cover bg-center bg-no-repeat">
+          <div className="flex items-center gap-2 text-white">
+            <LayersIcon />
+            <span className="text-2xl font-bold">MATERIAIS</span>
+          </div>
+        </div>
+        <CardHeader className="mb-0 flex-row items-center justify-between">
+          <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
+            <span className="text-primary text-2xl font-bold">
+              Lista de Materiais
+            </span>
+            <div className="flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5">
+              <Search className="h-4 w-4 text-zinc-400" />
+              <input
+                className="flex-w h-full w-full bg-transparent text-zinc-400 outline-none placeholder:text-zinc-400"
+                placeholder="Procurar"
+              />
+            </div>
+            <div className="bg-primary/50 flex items-center gap-4 rounded-md px-2 py-1">
+              <div
+                onClick={() => setSelectedFilter("Todos")}
+                className={cn(
+                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
+                  selectedFilter === "Todos" && "bg-primary",
+                )}
+              >
+                Todos
+              </div>
+              <div
+                onClick={() => setSelectedFilter("Normal")}
+                className={cn(
+                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
+                  selectedFilter === "Normal" && "bg-primary",
+                )}
+              >
+                Normal
+              </div>
+              <div
+                onClick={() => setSelectedFilter("Baixo")}
+                className={cn(
+                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
+                  selectedFilter === "Baixo" && "bg-primary",
+                )}
+              >
+                Baixo
+              </div>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="overflow-x-auto px-0 pb-0">
+          <Table>
+            <TableHeader className="bg-primary">
+              <TableRow className="border-primary gap-[1px]">
+                {columns.map((column) => (
+                  <TableHead
+                    key={column.key}
+                    className={`text-sm font-semibold ${
+                      column.label === "Date" ? "" : ""
+                    } h-12 flex-row text-end uppercase last:text-start`}
+                  >
+                    <p className="text-center">{column.label}</p>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map((transaction) => (
+                <TableRow
+                  key={transaction.id}
+                  className="hover:bg-default-100 text-center"
+                >
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.name}
+                  </TableCell>
+                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.code}
+                  </TableCell>
+                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.type}
+                  </TableCell>
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.maker}
+                  </TableCell>
+                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.volume}
+                  </TableCell>
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.amount}
+                  </TableCell>
+                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.packaging}
+                  </TableCell>
+                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
+                    {transaction.minimum}
+                  </TableCell>
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    <div
+                      className={cn(
+                        "mx-auto w-max rounded-md border px-2 py-1",
+                        transaction.status === "Normal"
+                          ? "border-green-500 bg-green-500/20 text-green-500"
+                          : "border-red-500 bg-red-500/20 text-red-500",
+                      )}
+                    >
+                      {transaction.status}
+                    </div>
+                  </TableCell>
+                  <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
+                    <div className="bg-primary mx-auto w-max rounded-md p-1">
+                      <Eye />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+        <CardFooter className="mt-4 flex-none">
+          <CustomPagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pages={materialPages}
+          />
+        </CardFooter>
+      </Card>
+      <CreateClient open={openClientBoard} onClose={closeCreateClientBoard} />
+    </>
+  );
+};
+
+export default TableWithCards;

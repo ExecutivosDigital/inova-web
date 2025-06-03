@@ -4,7 +4,6 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { twMerge } from "tailwind-merge";
 
 interface MenusProps {
   title: string;
@@ -31,12 +30,16 @@ export default function MainMenu() {
               <NavigationMenu.Trigger asChild className="flex items-center">
                 <Link href={item.route}>
                   <div
-                    className={twMerge([
+                    className={cn(
                       "group data-[state=open]:text-primary-300 flex cursor-pointer items-center gap-2 px-6 py-4",
-                      path === item.route
-                        ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"
-                        : "text-default-500",
-                    ])}
+                      item.route === "/"
+                        ? path === "/"
+                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"
+                          : "text-default-500"
+                        : path.startsWith(item.route)
+                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"
+                          : "text-default-500",
+                    )}
                   >
                     {item.route === "/" ? (
                       <Image

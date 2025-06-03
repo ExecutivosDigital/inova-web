@@ -24,7 +24,7 @@ const NavTools = ({
       <div className="flex items-center gap-2 ltr:pl-2 rtl:pr-2">
         <ProfileInfo />
         <LogOut
-          className="cursor-pointer"
+          className="text-primary cursor-pointer"
           onClick={() => {
             if (confirm("Tem certeza que deseja sair?")) {
               // signOut();
@@ -57,7 +57,7 @@ const Header = () => {
         "sticky top-0 z-50": navbarType === "sticky",
       })}
     >
-      <div className="bg-card/90 w-full border-b border-b-white px-[15px] py-3 backdrop-blur-lg md:px-6">
+      <div className="w-full border-b border-b-white bg-white px-[15px] py-3 backdrop-blur-lg md:px-6">
         <div className="flex h-full items-center justify-between">
           <HorizontalHeader />
           <NavTools

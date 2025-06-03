@@ -18,11 +18,14 @@ import {
 
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { cn } from "@/lib/utils";
+import { materials } from "@/mock/materials";
 import { Eye, LayersIcon, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import CreateClient from "./CreateClient";
 
 const TableWithCards = () => {
+  const router = useRouter();
   const columns = [
     { key: "name", label: "Nome Comercial" },
     { key: "code", label: "Código" },
@@ -34,21 +37,6 @@ const TableWithCards = () => {
     { key: "minimum", label: "Mínimo" },
     { key: "status", label: "Status" },
     { key: "actions", label: "Ações" },
-  ];
-
-  const transactions = [
-    {
-      id: 1,
-      name: "Graxa Alta Temp. 500",
-      code: "123456-A",
-      type: "Graxa",
-      maker: "Mobil",
-      volume: "18Kg",
-      amount: "42",
-      packaging: "Garrafas",
-      minimum: "20",
-      status: "Normal",
-    },
   ];
 
   const [openClientBoard, setOpenClientBoard] = useState(false);
@@ -119,9 +107,7 @@ const TableWithCards = () => {
                 {columns.map((column) => (
                   <TableHead
                     key={column.key}
-                    className={`text-sm font-semibold ${
-                      column.label === "Date" ? "" : ""
-                    } h-12 flex-row text-end uppercase last:text-start`}
+                    className="h-12 flex-row text-end text-sm font-semibold text-white uppercase last:text-start"
                   >
                     <p className="text-center">{column.label}</p>
                   </TableHead>
@@ -129,45 +115,46 @@ const TableWithCards = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.map((transaction) => (
+              {materials.map((material) => (
                 <TableRow
-                  key={transaction.id}
-                  className="hover:bg-default-100 text-center"
+                  key={material.id}
+                  onClick={() => router.push(`/materials/${material.id}`)}
+                  className="hover:bg-primary/10 cursor-pointer text-center transition duration-200"
                 >
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.name}
+                    {material.name}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.code}
+                    {material.code}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.type}
+                    {material.type}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.maker}
+                    {material.maker}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.volume}
+                    {material.volume}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.amount}
+                    {material.amount}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.packaging}
+                    {material.packaging}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {transaction.minimum}
+                    {material.minimum}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
                     <div
                       className={cn(
                         "mx-auto w-max rounded-md border px-2 py-1",
-                        transaction.status === "Normal"
+                        material.status === "Normal"
                           ? "border-green-500 bg-green-500/20 text-green-500"
                           : "border-red-500 bg-red-500/20 text-red-500",
                       )}
                     >
-                      {transaction.status}
+                      {material.status}
                     </div>
                   </TableCell>
                   <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">

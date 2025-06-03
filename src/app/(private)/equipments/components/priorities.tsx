@@ -18,28 +18,25 @@ import {
 
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { cn } from "@/lib/utils";
-import { materials } from "@/mock/materials";
+import { equipments } from "@/mock/equipments";
 import { Eye, LayersIcon, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const TableWithCards = () => {
+export function Priorities() {
   const router = useRouter();
   const columns = [
-    { key: "name", label: "Nome Comercial" },
-    { key: "code", label: "Código" },
-    { key: "type", label: "Tipo" },
-    { key: "maker", label: "Fabricante" },
-    { key: "volume", label: "Volume" },
-    { key: "amount", label: "Estoque" },
-    { key: "packaging", label: "Embalagem" },
-    { key: "minimum", label: "Mínimo" },
-    { key: "status", label: "Status" },
+    { key: "name", label: "Nome" },
+    { key: "tag", label: "TAG" },
+    { key: "consumption", label: "Consumo" },
+    { key: "last", label: "Último Serviço" },
+    { key: "programmed", label: "Data Programada" },
+    { key: "executed", label: "Data Executada" },
     { key: "actions", label: "Ações" },
   ];
 
   const [selectedFilter, setSelectedFilter] = useState("Todos");
-  const [materialPages] = useState<number>(1);
+  const [equipmentPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
@@ -48,14 +45,12 @@ const TableWithCards = () => {
         <div className="flex h-40 w-full items-center justify-center bg-[url('/static/materials-header.png')] bg-cover bg-center bg-no-repeat">
           <div className="flex items-center gap-2 text-white">
             <LayersIcon />
-            <span className="text-2xl font-bold">MATERIAIS</span>
+            <span className="text-2xl font-bold">EQUIPAMENTOS E DADOS</span>
           </div>
         </div>
         <CardHeader className="mb-0 flex-row items-center justify-between">
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <span className="text-primary text-2xl font-bold">
-              Lista de Materiais
-            </span>
+            <span className="text-primary text-2xl font-bold">Prioridades</span>
             <div className="flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5">
               <Search className="h-4 w-4 text-zinc-400" />
               <input
@@ -109,47 +104,29 @@ const TableWithCards = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {materials.map((material) => (
+              {equipments.map((equipment) => (
                 <TableRow
-                  key={material.id}
-                  onClick={() => router.push(`/materials/${material.id}`)}
+                  key={equipment.id}
+                  onClick={() => router.push(`/equipments/${equipment.id}`)}
                   className="hover:bg-primary/10 cursor-pointer text-center transition duration-200"
                 >
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {material.name}
-                  </TableCell>
-                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {material.code}
-                  </TableCell>
-                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {material.type}
+                    {equipment.name}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {material.maker}
-                  </TableCell>
-                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {material.volume}
+                    {equipment.tag}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    {material.amount}
-                  </TableCell>
-                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {material.packaging}
-                  </TableCell>
-                  <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
-                    {material.minimum}
+                    {equipment.consumption}
                   </TableCell>
                   <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
-                    <div
-                      className={cn(
-                        "mx-auto w-max rounded-md border px-2 py-1",
-                        material.status === "Normal"
-                          ? "border-green-500 bg-green-500/20 text-green-500"
-                          : "border-red-500 bg-red-500/20 text-red-500",
-                      )}
-                    >
-                      {material.status}
-                    </div>
+                    {equipment.last}
+                  </TableCell>
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    {equipment.programmed}
+                  </TableCell>
+                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                    {equipment.executed}
                   </TableCell>
                   <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
                     <div className="bg-primary mx-auto w-max rounded-md p-1">
@@ -165,12 +142,10 @@ const TableWithCards = () => {
           <CustomPagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            pages={materialPages}
+            pages={equipmentPages}
           />
         </CardFooter>
       </Card>
     </>
   );
-};
-
-export default TableWithCards;
+}

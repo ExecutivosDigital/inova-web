@@ -1,7 +1,7 @@
+import { ContextProviders } from "@/context/ContextProviders";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { ContextProviders } from "@/context/ContextProviders";
 
 const poppins = Poppins({
   variable: "--font-poppins",

@@ -1,4 +1,4 @@
-import { EquipmentsProps } from "@/@types/equipments";
+import { EquipmentSetsProps, EquipmentsProps } from "@/@types/equipments";
 
 export const equipments: EquipmentsProps[] = [
   {
@@ -11,3 +11,39 @@ export const equipments: EquipmentsProps[] = [
     executed: "08/05/2025 15:30",
   },
 ];
+
+export const equipmentSets: EquipmentSetsProps = {
+  sets: [
+    {
+      id: 1,
+      name: "Conjunto 1",
+      subsets: [
+        {
+          id: 1,
+          name: "Subconjunto 1",
+          cips: [],
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Conjunto 2",
+      subsets: [],
+    },
+    {
+      id: 3,
+      name: "Conjunto 3",
+      subsets: [],
+    },
+    {
+      id: 4,
+      name: "Conjunto 4",
+      subsets: [],
+    },
+    {
+      id: 5,
+      name: "Conjunto 5",
+      subsets: [],
+    },
+  ],
+};

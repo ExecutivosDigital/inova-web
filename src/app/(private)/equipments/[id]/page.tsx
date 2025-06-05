@@ -5,6 +5,7 @@ import { equipments } from "@/mock/equipments";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Attachments } from "./components/attachments";
+import { EquipmentSets } from "./components/equipment-sets";
 import { Form } from "./components/form";
 import { Gallery } from "./components/gallery";
 import { Header } from "./components/header";
@@ -43,6 +44,7 @@ export default function EquipmentDetails() {
             <Form selectedEquipment={selectedEquipment} />
             <Kpis />
             <OsTable />
+            <EquipmentSets />
             <div className="flex w-full flex-col items-center justify-between gap-2 p-2 xl:flex-row xl:gap-4 xl:p-4">
               <Attachments />
               <Gallery />

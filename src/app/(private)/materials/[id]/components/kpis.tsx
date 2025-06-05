@@ -1,3 +1,5 @@
+import { DatePicker } from "@/components/date-picker";
+
 export function Kpis() {
   return (
     <div className="flex w-full flex-col gap-4 p-4">
@@ -5,6 +7,7 @@ export function Kpis() {
         <span className="text-primary text-2xl font-semibold">
           Indicadores do Material
         </span>
+        <DatePicker />
       </div>
       <div className="flex w-full flex-col items-center justify-evenly gap-4 xl:flex-row">
         <div className="flex h-40 w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-md bg-[url('/static/materials-1.png')] bg-cover bg-center bg-no-repeat xl:h-60 xl:w-1/5 xl:gap-4">

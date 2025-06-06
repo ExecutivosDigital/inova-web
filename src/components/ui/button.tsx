@@ -5,12 +5,12 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-0   disabled:opacity-50  whitespace-nowrap disabled:pointer-events-none",
+  "inline-flex items-center hover:text-white justify-center rounded-md text-sm font-semibold ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-0   disabled:opacity-50  whitespace-nowrap disabled:pointer-events-none",
   {
     variants: {
       color: {
-        default: "bg-primary text-primary-foreground",
-        primary: "bg-primary text-primary-foreground hover:bg-primary/80",
+        default: "bg-primary text-primary",
+        primary: "bg-primary text-primary hover:bg-primary/80",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/80",
         success: "bg-success text-success-foreground hover:bg-success/80",
@@ -21,10 +21,9 @@ const buttonVariants = cva(
         dark: "bg-accent-foreground text-accent hover:bg-accent-foreground/80",
       },
       variant: {
-        outline:
-          "border border-current  bg-transparent hover:text-primary-foreground",
-        soft: " bg-opacity-10  hover:text-primary-foreground",
-        ghost: "bg-transparent text-current hover:text-primary-foreground",
+        outline: "border border-current  bg-transparent hover:text-white",
+        soft: " bg-opacity-10  hover:text-primary",
+        ghost: "bg-transparent text-current hover:text-primary",
       },
       size: {
         default: "h-10 px-4 py-[10px]",
@@ -76,12 +75,12 @@ const buttonVariants = cva(
         variant: "outline",
         color: "default",
         className:
-          "text-primary  hover:text-primary-foreground hover:border-primary hover:bg-primary",
+          "text-primary  hover:text-white hover:border-primary hover:bg-primary",
       },
       {
         variant: "outline",
         color: "primary",
-        className: "text-primary  hover:text-primary-foreground",
+        className: "text-primary  hover:text-primary",
       },
       {
         variant: "soft",

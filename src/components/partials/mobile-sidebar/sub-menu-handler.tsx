@@ -29,9 +29,9 @@ const SubMenuHandler = ({
         <div
           onClick={() => toggleSubmenu(index)}
           className={cn(
-            "group text-default-700 hover:bg-primary hover:text-primary-foreground flex cursor-pointer rounded px-[10px] py-3 text-sm font-medium capitalize transition-all duration-100",
+            "group text-default-700 hover:bg-primary hover:text-primary flex cursor-pointer rounded px-[10px] py-3 text-sm font-medium capitalize transition-all duration-100",
             {
-              "bg-primary text-primary-foreground": activeSubmenu === index,
+              "bg-primary text-primary": activeSubmenu === index,
             },
           )}
         >
@@ -44,7 +44,7 @@ const SubMenuHandler = ({
           <div className="flex-0">
             <div
               className={cn(
-                "group-hover:text-primary-foreground flex items-center justify-center rounded-full text-base transition-all duration-300",
+                "group-hover:text-primary flex items-center justify-center rounded-full text-base transition-all duration-300",
                 {
                   "rotate-90": activeSubmenu === index,
                   "text-default-500": activeSubmenu !== index,

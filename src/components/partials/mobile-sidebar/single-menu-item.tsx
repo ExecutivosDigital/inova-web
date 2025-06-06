@@ -21,7 +21,7 @@ const SingleMenuItem = ({
               className={cn(
                 "relative mx-auto inline-flex h-12 w-12 flex-col items-center justify-center rounded-md transition-all duration-300",
                 {
-                  "bg-primary text-primary-foreground": isLocationMatch(
+                  "bg-primary text-primary": isLocationMatch(
                     href,
                     locationName,
                   ),
@@ -35,12 +35,9 @@ const SingleMenuItem = ({
         ) : (
           <div
             className={cn(
-              "text-default-700 hover:bg-primary hover:text-primary-foreground flex cursor-pointer gap-3 rounded px-[10px] py-3 text-sm capitalize",
+              "text-default-700 hover:bg-primary hover:text-primary flex cursor-pointer gap-3 rounded px-[10px] py-3 text-sm capitalize",
               {
-                "bg-primary text-primary-foreground": isLocationMatch(
-                  href,
-                  locationName,
-                ),
+                "bg-primary text-primary": isLocationMatch(href, locationName),
               },
             )}
           >

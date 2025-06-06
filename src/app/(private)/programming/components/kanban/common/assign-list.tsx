@@ -41,21 +41,21 @@ const AssignList = () => {
         <Button
           type="button"
           onClick={togglePopover}
-          className="bg-transparent text-sm font-medium text-default-500 hover:bg-transparent"
+          className="text-default-500 bg-transparent text-sm font-medium hover:bg-transparent"
         >
           UI/UX Design
         </Button>
       }
       open={open}
-      className={"left-[unset] right-0"}
+      className={"right-0 left-[unset]"}
       onClose={() => setOpen(false)}
     >
-      <div className="flex items-center justify-between border-b border-default-300 bg-default-50 px-3 py-2">
-        <div className="text-sm font-medium text-default-900">Task List </div>
+      <div className="border-default-300 bg-default-50 flex items-center justify-between border-b px-3 py-2">
+        <div className="text-default-900 text-sm font-medium">Task List </div>
         <Button
           type="button"
           size="icon"
-          className="h-6 w-6 rounded-full bg-default-400"
+          className="bg-default-400 h-6 w-6 rounded-full"
           onClick={togglePopover}
         >
           <X className="h-4 w-4" />
@@ -81,13 +81,13 @@ const AssignList = () => {
 
       <Dialog>
         <DialogTrigger asChild>
-          <div className="cursor-pointer border-b border-default-200 px-4 py-1.5 text-sm font-medium text-default-600 hover:bg-default-50 hover:underline hover:decoration-primary">
+          <div className="border-default-200 text-default-600 hover:bg-default-50 hover:decoration-primary cursor-pointer border-b px-4 py-1.5 text-sm font-medium hover:underline">
             Create a list
           </div>
         </DialogTrigger>
         <DialogContent size="lg" className="px-0">
-          <DialogHeader className="border-b border-default-300">
-            <div className="pb-4 text-center text-lg font-medium text-default-900">
+          <DialogHeader className="border-default-300 border-b">
+            <div className="text-default-900 pb-4 text-center text-lg font-medium">
               Create a list
             </div>
           </DialogHeader>

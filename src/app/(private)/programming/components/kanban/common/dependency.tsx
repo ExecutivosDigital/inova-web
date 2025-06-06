@@ -40,7 +40,7 @@ const Dependency = () => {
         <Button
           type="button"
           onClick={togglePopover}
-          className="cursor-pointer bg-transparent p-0 text-sm font-medium text-primary hover:bg-transparent hover:underline"
+          className="text-primary cursor-pointer bg-transparent p-0 text-sm font-medium hover:bg-transparent hover:underline"
         >
           Set
         </Button>
@@ -48,14 +48,14 @@ const Dependency = () => {
       open={open}
       onClose={() => setOpen(false)}
     >
-      <div className="flex items-center justify-between border-b border-default-300 bg-default-50 px-3 py-3">
-        <div className="text-sm font-medium text-default-900">
+      <div className="border-default-300 bg-default-50 flex items-center justify-between border-b px-3 py-3">
+        <div className="text-default-900 text-sm font-medium">
           Set Task Dependency
         </div>
         <Button
           type="button"
           size="icon"
-          className="h-6 w-6 rounded-full bg-default-400"
+          className="bg-default-400 h-6 w-6 rounded-full"
           onClick={togglePopover}
         >
           <X className="h-4 w-4" />
@@ -78,10 +78,10 @@ const Dependency = () => {
                 {item.name}
               </div>
               <div className="mt-1 flex items-center gap-1">
-                <div className="h-5 rounded border border-default-200 px-2 text-xs font-medium leading-5">
+                <div className="border-default-200 h-5 rounded border px-2 text-xs leading-5 font-medium">
                   {item.projectId}
                 </div>
-                <div className="text-sm text-default-700">{item.date}</div>
+                <div className="text-default-700 text-sm">{item.date}</div>
               </div>
             </CommandItem>
           ))}

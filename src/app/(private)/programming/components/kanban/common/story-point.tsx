@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 const StoryPoint = () => {
   return (
@@ -7,7 +7,7 @@ const StoryPoint = () => {
         <input
           type="number"
           placeholder="Set"
-          className="w-full border-b border-default-300 focus:outline-none  text-sm font-medium text-default-900 appearance-none placeholder:text-primary"
+          className="border-default-300 text-default-900 placeholder:text-primary w-full appearance-none border-b text-sm font-medium focus:outline-none"
         />
       </div>
     </>

@@ -42,23 +42,23 @@ const AssignMembers = ({ icon }: { icon?: React.ReactNode }) => {
     <CustomPopover
       trigger={
         <button
-          className="grid h-5 w-5 place-content-center rounded-full bg-default-100"
+          className="bg-default-100 grid h-5 w-5 place-content-center rounded-full"
           onClick={togglePopover}
         >
-          {icon ? icon : <UserPlus className="h-3 w-3 text-primary" />}
+          {icon ? icon : <UserPlus className="text-primary h-3 w-3" />}
         </button>
       }
       open={open}
       onClose={() => setOpen(false)}
     >
-      <div className="flex items-center justify-between border-b border-default-300 bg-default-50 px-3 py-2">
-        <div className="text-sm font-medium text-default-900">
+      <div className="border-default-300 bg-default-50 flex items-center justify-between border-b px-3 py-2">
+        <div className="text-default-900 text-sm font-medium">
           Assign Task To
         </div>
         <Button
           type="button"
           size="icon"
-          className="h-6 w-6 rounded-full bg-default-400"
+          className="bg-default-400 h-6 w-6 rounded-full"
           onClick={togglePopover}
         >
           <X className="h-4 w-4" />
@@ -83,7 +83,7 @@ const AssignMembers = ({ icon }: { icon?: React.ReactNode }) => {
                   <AvatarImage src={item.image} />
                   <AvatarFallback>SN</AvatarFallback>
                 </Avatar>
-                <span className="font-base capitalize text-default-900">
+                <span className="font-base text-default-900 capitalize">
                   {item.name}
                 </span>
               </CommandItem>

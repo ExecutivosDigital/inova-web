@@ -28,7 +28,7 @@ const TaskDate = () => {
           className="bg-transparent p-0 text-start hover:bg-transparent"
           onClick={togglePopover}
         >
-          <span className="whitespace-normal text-sm font-medium text-default-500">
+          <span className="text-default-500 text-sm font-medium whitespace-normal">
             Due: 30 Feb, 2024 / 5:23AM
           </span>
         </Button>

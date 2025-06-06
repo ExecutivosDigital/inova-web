@@ -34,7 +34,7 @@ const Task = ({ client, setOpenEditSheet }: TaskProps) => {
         }}
         onClick={() => setOpenEditSheet && setOpenEditSheet({ ...client })}
         className={cn(
-          "group relative cursor-pointer border-default-300 bg-default-100 p-2 shadow",
+          "group border-default-300 bg-default-100 relative cursor-pointer p-2 shadow",
           {
             "opacity-50": isDragging,
           },
@@ -42,7 +42,7 @@ const Task = ({ client, setOpenEditSheet }: TaskProps) => {
       >
         <CardContent className="p-0">
           <div className="relative">
-            <div className="my-1 text-sm font-semibold capitalize text-default-700">
+            <div className="text-default-700 my-1 text-sm font-semibold capitalize">
               {client.name}
             </div>
           </div>

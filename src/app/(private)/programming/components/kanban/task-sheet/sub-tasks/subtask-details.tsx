@@ -68,13 +68,13 @@ const SubtaskDetailsSheet = ({
           {/* assignd members */}
           <div>
             <div className="mb-3 flex items-center gap-1">
-              <div className="grid h-6 w-6 place-content-center rounded-full bg-default-100">
+              <div className="bg-default-100 grid h-6 w-6 place-content-center rounded-full">
                 <Icon
                   icon="heroicons:user-plus"
-                  className="h-3.5 w-3.5 text-primary"
+                  className="text-primary h-3.5 w-3.5"
                 />
               </div>
-              <span className="text-sm font-medium text-default-900">
+              <span className="text-default-900 text-sm font-medium">
                 Assigned
               </span>
             </div>
@@ -88,7 +88,7 @@ const SubtaskDetailsSheet = ({
                   <TooltipProvider key={`task-assigned-members-${index}`}>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Avatar className="h-6 w-6 ring-1 ring-background ring-offset-[2px] ring-offset-background">
+                        <Avatar className="ring-background ring-offset-background h-6 w-6 ring-1 ring-offset-[2px]">
                           <AvatarImage src={item.image} />
                           <AvatarFallback>AB</AvatarFallback>
                         </Avatar>
@@ -105,25 +105,25 @@ const SubtaskDetailsSheet = ({
                   </TooltipProvider>
                 ))}
 
-                <Avatar className="h-6 w-6 ring-1 ring-background ring-offset-[2px] ring-offset-background">
+                <Avatar className="ring-background ring-offset-background h-6 w-6 ring-1 ring-offset-[2px]">
                   <AvatarFallback className="font-normal">+10</AvatarFallback>
                 </Avatar>
               </AvatarGroup>
               {/* add new member */}
-              <AssignMembers icon={<Plus className="h-4 w-4 text-primary" />} />
+              <AssignMembers icon={<Plus className="text-primary h-4 w-4" />} />
             </div>
           </div>
           {/* assigned members end */}
           {/* priority */}
           <div>
             <div className="mb-3 flex items-center gap-1">
-              <div className="grid h-6 w-6 place-content-center rounded-full bg-default-100">
+              <div className="bg-default-100 grid h-6 w-6 place-content-center rounded-full">
                 <Icon
                   icon="heroicons:scale"
-                  className="h-3.5 w-3.5 text-primary"
+                  className="text-primary h-3.5 w-3.5"
                 />
               </div>
-              <span className="text-sm font-medium text-default-900">
+              <span className="text-default-900 text-sm font-medium">
                 Priority
               </span>
             </div>
@@ -135,13 +135,13 @@ const SubtaskDetailsSheet = ({
           {/* task date */}
           <div>
             <div className="mb-3 flex items-center gap-1">
-              <div className="grid h-6 w-6 place-content-center rounded-full bg-default-100">
+              <div className="bg-default-100 grid h-6 w-6 place-content-center rounded-full">
                 <Icon
                   icon="heroicons:calendar"
-                  className="h-3.5 w-3.5 text-primary"
+                  className="text-primary h-3.5 w-3.5"
                 />
               </div>
-              <span className="text-sm font-medium text-default-900">Date</span>
+              <span className="text-default-900 text-sm font-medium">Date</span>
             </div>
             <TaskDate />
           </div>

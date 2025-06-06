@@ -41,8 +41,8 @@ const Attachments = () => {
       <div className="flex items-center space-x-3">
         <div className="file-preview">{renderFilePreview(file)}</div>
         <div>
-          <div className="text-sm text-card-foreground">{file.name}</div>
-          <div className="text-xs font-light text-muted-foreground">
+          <div className="text-card-foreground text-sm">{file.name}</div>
+          <div className="text-muted-foreground text-xs font-light">
             {Math.round(file.size / 100) / 10 > 1000 ? (
               <>{(Math.round(file.size / 100) / 10000).toFixed(1)}</>
             ) : (
@@ -71,15 +71,15 @@ const Attachments = () => {
       <div className="mb-4 flex items-center gap-1 px-4 py-1">
         <Icon
           icon="heroicons:link-20-solid"
-          className="h-4 w-4 text-default-500"
+          className="text-default-500 h-4 w-4"
         />
-        <div className="text-sm font-medium text-default-500">Attachments</div>
+        <div className="text-default-500 text-sm font-medium">Attachments</div>
       </div>
       <div {...getRootProps({ className: "dropzone" })}>
         <input {...getInputProps()} />
-        <div className="rounded-sm border border-dashed border-default-300 bg-default-50 py-9 text-center">
-          <div className="flex items-center justify-center gap-1 text-sm font-medium text-default-900">
-            <Link className="h-4 w-4 text-default-600" />
+        <div className="border-default-300 bg-default-50 rounded-sm border border-dashed py-9 text-center">
+          <div className="text-default-900 flex items-center justify-center gap-1 text-sm font-medium">
+            <Link className="text-default-600 h-4 w-4" />
             Drag & drop or
             <span className="underline">choose files</span>
           </div>

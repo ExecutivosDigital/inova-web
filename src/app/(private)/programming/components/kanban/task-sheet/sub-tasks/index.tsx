@@ -33,11 +33,11 @@ const SubTasks = ({
     <>
       <div className="pt-3">
         <div className="mb-2 flex px-6">
-          <div className="flex-1 text-base font-medium capitalize text-default-700">
+          <div className="text-default-700 flex-1 text-base font-medium capitalize">
             Progress
           </div>
           <div className="flex flex-1 items-center gap-2">
-            <div className="flex-none text-xs font-medium text-default-500">
+            <div className="text-default-500 flex-none text-xs font-medium">
               {completedSubtasks.length}/{totalSubtasks}
             </div>
             <div className="flex-1">
@@ -65,7 +65,7 @@ const SubTasks = ({
         </div>
         <AddSubTask taskId={taskId} />
         <div
-          className="flex cursor-pointer items-center gap-1 px-6 py-4 text-xs font-medium text-default-500"
+          className="text-default-500 flex cursor-pointer items-center gap-1 px-6 py-4 text-xs font-medium"
           onClick={handleShowCompleteTask}
         >
           {completedSubtasks.length} Completed Subtask{" "}

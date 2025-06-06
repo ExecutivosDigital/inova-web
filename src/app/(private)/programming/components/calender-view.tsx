@@ -1,7 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/utils/use-media-query";
@@ -13,7 +12,6 @@ import listPlugin from "@fullcalendar/list";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Icon } from "@iconify/react";
-import { Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import NewEventSheet from "./NewEventSheet";
 import ExternalDraggingevent from "./dragging-events";
@@ -148,15 +146,6 @@ const CalendarView = () => {
       <div className="divide-border grid h-full grid-cols-12 gap-6 divide-x lg:gap-2 xl:gap-6">
         <Card className="col-span-12 h-[80vh] p-0 lg:col-span-4 lg:h-full 2xl:col-span-3">
           <CardContent className="h-full p-0">
-            <CardHeader className="flex flex-row items-center gap-2 space-y-0 border-none pt-5 lg:gap-1 lg:px-1 lg:pt-2 xl:pt-5">
-              <Button
-                onClick={() => handleDateClick({ date: new Date() })}
-                className="m-0 w-full text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
-              >
-                <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
-                Novo Planejamento de Rota
-              </Button>
-            </CardHeader>
             <div className="px-3">
               <Calendar
                 mode="single"

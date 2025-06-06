@@ -1,5 +1,5 @@
 import CalendarView from "./components/calender-view";
-import { PlanningTable } from "./components/os-table";
+import { PlanningTable } from "./components/planning-table";
 
 export default function Planning() {
   return (

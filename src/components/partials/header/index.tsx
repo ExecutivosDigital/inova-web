@@ -54,10 +54,10 @@ const Header = () => {
   return (
     <ClassicHeader
       className={cn(" ", {
-        "sticky top-0 z-50": navbarType === "sticky",
+        "sticky top-0 z-[1000]": navbarType === "sticky",
       })}
     >
-      <div className="w-full border-b border-b-white bg-white px-[15px] py-3 backdrop-blur-lg md:px-6">
+      <div className="w-full border-b border-b-white bg-white px-[15px] py-0 backdrop-blur-lg md:px-6 2xl:py-3">
         <div className="flex h-full items-center justify-between">
           <HorizontalHeader />
           <NavTools

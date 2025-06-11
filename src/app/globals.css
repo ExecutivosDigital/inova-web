@@ -166,7 +166,7 @@
 
 .dash-tail-calendar .fc .fc-timegrid-axis-cushion,
 .dash-tail-calendar .fc .fc-timegrid-slot-label-cushion {
-  @apply dark:text-red-500;
+  @apply dark:text-primary;
 }
 
 .dash-tail-calendar .fc .fc-list-event:hover td {

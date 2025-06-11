@@ -10,7 +10,7 @@ export function HorizontalHeader() {
           alt="logo"
           width={200}
           height={200}
-          className="h-16 w-auto"
+          className="h-12 w-auto 2xl:h-16"
         />
       </Link>
     </div>

@@ -8,8 +8,6 @@ interface DatePickerProps {
   endDate: Date;
   setStartDate: React.Dispatch<React.SetStateAction<Date>>;
   setEndDate: React.Dispatch<React.SetStateAction<Date>>;
-  isFiltersOpen: boolean;
-  setIsFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DatePicker = createContext<DatePickerProps | undefined>(undefined);
@@ -21,7 +19,6 @@ interface ProviderProps {
 export const DatePickerProvider = ({ children }: ProviderProps) => {
   const [startDate, setStartDate] = useState(moment().toDate());
   const [endDate, setEndDate] = useState(moment().subtract(1, "week").toDate());
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   return (
     <DatePicker.Provider
@@ -30,8 +27,6 @@ export const DatePickerProvider = ({ children }: ProviderProps) => {
         endDate,
         setStartDate,
         setEndDate,
-        isFiltersOpen,
-        setIsFiltersOpen,
       }}
     >
       {children}

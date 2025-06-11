@@ -31,7 +31,7 @@ export default function MainMenu() {
                 <Link href={item.route}>
                   <div
                     className={cn(
-                      "group data-[state=open]:text-primary-300 flex cursor-pointer items-center gap-2 px-6 py-4",
+                      "group data-[state=open]:text-primary-300 flex cursor-pointer items-center gap-2 px-6 py-2 2xl:py-4",
                       item.route === "/"
                         ? path === "/"
                           ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"

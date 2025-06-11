@@ -2,9 +2,13 @@
 import { DatePicker } from "@/components/date-picker";
 import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export function DashboardGraphs() {
+  const [isFiltersOpen1, setIsFiltersOpen1] = useState(false);
+  const [isFiltersOpen2, setIsFiltersOpen2] = useState(false);
+
   const series1 = [
     {
       name: "Inflation",
@@ -142,7 +146,10 @@ export function DashboardGraphs() {
       <div className="border-primary bg-primary/20 flex w-full flex-col rounded-md border-2 xl:w-1/2">
         <div className="flex w-full items-center justify-between p-2">
           <span className="text-primary font-semibold">Material Consumido</span>
-          <DatePicker />
+          <DatePicker
+            isFiltersOpen={isFiltersOpen1}
+            setIsFiltersOpen={setIsFiltersOpen1}
+          />
         </div>
         <div className="h-60 w-full xl:h-96">
           <Chart
@@ -157,7 +164,10 @@ export function DashboardGraphs() {
       <div className="border-primary bg-primary/20 flex w-full flex-col rounded-md border-2 xl:w-1/2">
         <div className="flex w-full items-center justify-between p-2">
           <span className="text-primary font-semibold">OS/Colaborador</span>
-          <DatePicker />
+          <DatePicker
+            isFiltersOpen={isFiltersOpen2}
+            setIsFiltersOpen={setIsFiltersOpen2}
+          />
         </div>
         <div className="h-60 w-full xl:h-96">
           <Chart

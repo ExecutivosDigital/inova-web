@@ -28,7 +28,6 @@ import { activitySubTaskType } from "@/@staticData/activities/subtasks";
 import { activityTaskType } from "@/@staticData/activities/tasks";
 import { useApiContext } from "@/context/ApiContext";
 import Board from "./board";
-import CreateClient from "./CreateClient";
 import EditClient from "./EditClient";
 import Task from "./task";
 import TaskHeader from "./task-header";
@@ -158,12 +157,13 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
   const [openEditSheet, setOpenEditSheet] = useState(false);
 
   const openCreateBoard = () => {
+    console.log("open: ", open);
     setOpen(true);
   };
 
-  const closeCreateBoard = () => {
-    setOpen(false);
-  };
+  // const closeCreateBoard = () => {
+  //   setOpen(false);
+  // };
 
   const closeUpdateTaskHandler = () => {
     setOpen3(false);
@@ -551,13 +551,13 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
           </CardContent>
         </Card>
       )} */}
-      {open && (
+      {/* {open && (
         <CreateClient
           open={open}
           handleRefresh={() => handleGetProposals()}
           onClose={closeCreateBoard}
         />
-      )}
+      )} */}
       {openEditSheet && (
         <EditClient
           onClose={() => {

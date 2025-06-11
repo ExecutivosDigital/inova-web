@@ -11,15 +11,16 @@ import {
 } from "./ui/dropdown-menu";
 import { Label } from "./ui/label";
 
-export function DatePicker() {
-  const {
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-    isFiltersOpen,
-    setIsFiltersOpen,
-  } = useDatePicker();
+interface DatePickerProps {
+  isFiltersOpen: boolean;
+  setIsFiltersOpen: (value: boolean) => void;
+}
+
+export function DatePicker({
+  isFiltersOpen,
+  setIsFiltersOpen,
+}: DatePickerProps) {
+  const { startDate, endDate, setStartDate, setEndDate } = useDatePicker();
   const [localStartDateFilter, setLocalStartDateFilter] =
     useState<Date>(startDate);
   const [localEndDateFilter, setLocalEndDateFilter] = useState<Date>(endDate);
@@ -51,7 +52,7 @@ export function DatePicker() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="flex w-auto flex-col bg-white p-2"
+        className="border-primary flex w-auto flex-col bg-white p-0 2xl:p-2"
         align="end"
       >
         <div className="flex gap-2">
@@ -99,7 +100,7 @@ export function DatePicker() {
           </div>
         </div>
         <Button
-          className="m-1"
+          className="m-1 h-max py-1 text-white"
           onClick={() => {
             setStartDate(localStartDateFilter);
             setEndDate(localEndDateFilter);

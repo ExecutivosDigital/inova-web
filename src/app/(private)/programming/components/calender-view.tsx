@@ -1,6 +1,7 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/utils/use-media-query";
@@ -11,11 +12,10 @@ import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { Icon } from "@iconify/react";
+import { Plus } from "lucide-react";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import NewEventSheet from "./NewEventSheet";
 import ExternalDraggingevent from "./dragging-events";
-import EventSheet from "./event-sheet";
 
 interface CalendarEventProps {
   id: string;
@@ -29,39 +29,33 @@ interface CalendarEventProps {
 }
 
 const CalendarView = () => {
-  const [selectedEventDate] = useState<Date | null>(null);
-
-  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-
-  // event canvas state
-  const [sheetOpen, setSheetOpen] = useState<boolean>(false);
-  const [newEventSheetOpen, setNewEventSheetOpen] = useState<boolean>(false);
-  const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
+  // const [selectedEventDate] = useState<Date | null>(null);
+  // const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  // const [sheetOpen, setSheetOpen] = useState<boolean>(false);
+  // const [newEventSheetOpen, setNewEventSheetOpen] = useState<boolean>(false);
+  // const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
   const [sidebarEvents] = React.useState<CalendarEventProps[] | null>([]);
-  const [presetName, setPresetName] = useState<string>("");
+  // const [presetName, setPresetName] = useState<string>("");
   const isLg = useMediaQuery("(min-width: 1024px)");
 
-  // event click
-  const handleEventClick = (arg: string) => {
-    setSelectedEventId(arg);
-    setSheetOpen(true);
-  };
-  // handle close modal
-  const handleCloseModal = () => {
-    setSheetOpen(false);
-  };
+  // const handleEventClick = (arg: string) => {
+  //   setSelectedEventId(arg);
+  //   setSheetOpen(true);
+  // };
+  // const handleCloseModal = () => {
+  //   setSheetOpen(false);
+  // };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateClick = (arg: any) => {
-    setNewEventSheetOpen(true);
-    setNewSelectedDate(arg.date);
-  };
+  // const handleDateClick = (arg: any) => {
+  //   setNewEventSheetOpen(true);
+  //   setNewSelectedDate(arg.date);
+  // };
 
-  const handleCloseDateClick = () => {
-    setNewEventSheetOpen(false);
-    setNewSelectedDate(null);
-  };
+  // const handleCloseDateClick = () => {
+  //   setNewEventSheetOpen(false);
+  //   setNewSelectedDate(null);
+  // };
 
   const handleClassName = () => {
     return "min-h-[40px] border-none transition duration-150 hover:-translate-y-0.5 hover:shadow-sm";
@@ -79,23 +73,18 @@ const CalendarView = () => {
             eventInfo.view.type === "dayGridMonth" && "truncate",
           )}
         >
-          {eventInfo.event._def.extendedProps.calendar === "google" ? (
-            <Icon
-              icon="devicon:google"
-              className={cn(
-                "absolute",
-                isLg ? "top-2 left-2 h-5 w-5" : "top-1 left-1 h-4 w-4",
-              )}
-            />
-          ) : (
-            <Icon
-              icon="vscode-icons:file-type-outlook"
-              className={cn(
-                "absolute",
-                isLg ? "top-2 left-2 h-5 w-5" : "top-1 left-1 h-4 w-4",
-              )}
-            />
-          )}
+          <Image
+            src="/logo/icon.png"
+            alt=""
+            width={200}
+            height={200}
+            className={cn(
+              "absolute",
+              isLg
+                ? "top-2 left-2 h-5 w-max object-contain"
+                : "top-1 left-1 h-4 w-max object-contain",
+            )}
+          />
 
           <span className="ml-6 h-full w-full">{eventInfo.event.title}</span>
         </div>
@@ -103,8 +92,18 @@ const CalendarView = () => {
     );
   }
 
+  function renderNoEventsContent() {
+    return (
+      <span className="text-primary text-2xl font-bold">
+        Sem OS programadas neste período
+      </span>
+    );
+  }
+
   const [dragEvents] = useState([
-    { title: "Rota", id: "123465123612", tag: "business" },
+    { title: "OS 1", id: "123465123612", tag: "business" },
+    { title: "OS 2", id: "64562346", tag: "business" },
+    { title: "OS 3", id: "374692348567", tag: "business" },
   ]);
 
   useEffect(() => {
@@ -119,7 +118,7 @@ const CalendarView = () => {
             const id = eventEl.getAttribute("data");
             const event = dragEvents.find((e) => e.id === id);
             const tag = event ? event.tag : "";
-            setPresetName(title ? title : "");
+            // setPresetName(title ? title : "");
             return {
               title: title,
               id: id,
@@ -144,8 +143,17 @@ const CalendarView = () => {
   return (
     <>
       <div className="divide-border grid h-full grid-cols-12 gap-6 divide-x lg:gap-2 xl:gap-6">
-        <Card className="col-span-12 h-[80vh] p-0 lg:col-span-4 lg:h-full 2xl:col-span-3">
+        <Card className="col-span-12 h-[80vh] border-r-0 p-0 lg:col-span-4 lg:h-full 2xl:col-span-3">
           <CardContent className="h-full p-0">
+            <CardHeader className="flex flex-row items-center gap-2 space-y-0 border-none pt-5 lg:gap-1 lg:px-1 lg:pt-2 xl:pt-5">
+              <Button
+                // onClick={() => handleDateClick({ date: new Date() })}
+                className="m-0 w-full text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
+              >
+                <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
+                Nova Programação de Rota
+              </Button>
+            </CardHeader>
             <div className="px-3">
               <Calendar
                 mode="single"
@@ -159,7 +167,7 @@ const CalendarView = () => {
               className="mt-6 space-y-1.5 px-4 lg:mt-2 xl:mt-6"
             >
               <p className="text-default-700 pb-2 text-sm font-medium">
-                Arraste os cards para o calendário para planejar uma rota
+                Arraste os cards para o calendário para programar uma rota
               </p>
               {dragEvents.map((event) => (
                 <ExternalDraggingevent key={event.id} event={event} />
@@ -169,7 +177,7 @@ const CalendarView = () => {
               {sidebarEvents && sidebarEvents.length !== 0 ? (
                 sidebarEvents.map((item, index) => (
                   <div
-                    onClick={() => handleEventClick(item.id)}
+                    // onClick={() => handleEventClick(item.id)}
                     className="before:bg-primary hover:bg-primary/10 relative flex cursor-pointer items-center justify-between gap-4 px-2 pl-4 transition duration-100 before:absolute before:top-0 before:left-0 before:h-full before:w-1 hover:-translate-y-0.5 hover:shadow"
                     key={`works-note-${index}`}
                   >
@@ -236,19 +244,20 @@ const CalendarView = () => {
                 eventDurationEditable={false}
                 selectable={true}
                 selectMirror={true}
-                eventReceive={(info) => {
-                  setNewEventSheetOpen(true);
-                  setNewSelectedDate(info.event.start);
-                  info.revert();
-                }}
+                // eventReceive={(info) => {
+                //   setNewEventSheetOpen(true);
+                //   setNewSelectedDate(info.event.start);
+                //   info.revert();
+                // }}
                 // droppable={true}
                 weekends={true}
                 eventClassNames={handleClassName}
                 eventContent={RenderEventContent}
-                dateClick={handleDateClick}
-                eventClick={(arg) => handleEventClick(arg.event._def.publicId)}
+                // dateClick={handleDateClick}
+                // eventClick={(arg) => handleEventClick(arg.event._def.publicId)}
                 initialView="dayGridMonth"
                 locale={ptBR}
+                noEventsContent={renderNoEventsContent}
               />
             ) : (
               <>
@@ -275,33 +284,30 @@ const CalendarView = () => {
                   weekends={true}
                   eventClassNames={handleClassName}
                   eventContent={RenderEventContent}
-                  dateClick={handleDateClick}
-                  eventClick={(arg) =>
-                    handleEventClick(arg.event._def.publicId)
-                  }
+                  // dateClick={handleDateClick}
+                  // eventClick={(arg) =>
+                  //   handleEventClick(arg.event._def.publicId)
+                  // }
                   initialView="dayGridMonth"
                   locale={ptBR}
                   viewClassNames={"h-[70vh]"}
+                  noEventsContent={renderNoEventsContent}
                 />
               </>
             )}
-            {/* <div className="flex h-full w-full items-center justify-center gap-2 font-bold italic text-primary">
-                    <Loader2 className="animate-spin" />
-                    Buscando eventos...
-                  </div> */}
           </CardContent>
         </Card>
       </div>
 
-      {selectedEventId && (
+      {/* {selectedEventId && (
         <EventSheet
           open={sheetOpen}
           onClose={handleCloseModal}
           selectedDate={selectedEventDate}
           selectedEventId={selectedEventId}
         />
-      )}
-      {newSelectedDate && (
+      )} */}
+      {/* {newSelectedDate && (
         <NewEventSheet
           open={newEventSheetOpen}
           onClose={handleCloseDateClick}
@@ -309,7 +315,7 @@ const CalendarView = () => {
           selectedEventId={selectedEventId}
           presetName={presetName}
         />
-      )}
+      )} */}
     </>
   );
 };

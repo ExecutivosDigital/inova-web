@@ -124,6 +124,7 @@ export function Form({ selectedEquipment }: FormProps) {
             <textarea
               className="peer transparent absolute left-0 h-full w-[calc(100%-2rem)] resize-none p-2 text-xs text-white placeholder:text-white focus:outline-none md:p-4 md:text-sm"
               placeholder="Descrição do Equipamento"
+              readOnly
             />
             <CheckCheck className="h-4 text-white" />
             <div className="absolute left-0 z-10 h-full w-full rounded-2xl shadow-[0px_2px_7px_rgba(0,0,0,0.5)] transition duration-200 peer-focus:shadow-[0px_2px_7px_rgba(0,0,0,0.5)]" />

@@ -2,7 +2,6 @@
 import { activitySubTaskType } from "@/@staticData/activities/subtasks";
 import { activityTaskType } from "@/@staticData/activities/tasks";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
-import { Progress } from "@/components/ui/progress";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import AddSubTask from "./add-sub-task";
@@ -41,14 +40,14 @@ const SubTasks = ({
               {completedSubtasks.length}/{totalSubtasks}
             </div>
             <div className="flex-1">
-              <Progress
+              {/* <Progress
                 value={
                   totalSubtasks > 0
                     ? (completedSubtasks.length / totalSubtasks) * 100
                     : 0
                 }
                 size="sm"
-              />
+              /> */}
             </div>
           </div>
         </div>

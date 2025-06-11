@@ -432,16 +432,15 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
 
   const [selectedFilter] = useState<string>("status");
   const [inputText, setInputText] = useState<string>("");
-  const { GetAPI } = useApiContext();
   async function getProposalsByStatus() {
-    const result = await GetAPI("/proposal-status/proposals", true);
-    console.log("resultado status", result.body.status);
-    setBoards(result.body.status);
+    // const result = await GetAPI("/proposal-status/proposals", true);
+    // console.log("resultado status", result.body.status);
+    // setBoards(result.body.status);
   }
   async function getProposalsByType() {
-    const result = await GetAPI("/proposal-type/proposals", true);
-    console.log("resultado type", result);
-    setBoards(result.body.types);
+    // const result = await GetAPI("/proposal-type/proposals", true);
+    // console.log("resultado type", result);
+    // setBoards(result.body.types);
   }
   async function handleGetProposals() {
     if (selectedFilter === "status") {
@@ -570,13 +569,15 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
         />
       )}
 
-      <TaskSheet
-        open={open3}
-        onClose={closeUpdateTaskHandler}
-        task={selectedTask as activityTaskType}
-        taskId={selectedTaskId as activityTaskType["id"]}
-        subTasks={subTasks}
-      />
+      {open3 && (
+        <TaskSheet
+          open={open3}
+          onClose={closeUpdateTaskHandler}
+          task={selectedTask as activityTaskType}
+          taskId={selectedTaskId as activityTaskType["id"]}
+          subTasks={subTasks}
+        />
+      )}
     </>
   );
 }

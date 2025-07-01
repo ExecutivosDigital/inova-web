@@ -96,7 +96,8 @@ export function PlanningTable() {
             {planningList.map((plan) => (
               <TableRow
                 key={plan.id}
-                className="hover:bg-primary/10 h-10 max-h-10 text-center transition duration-200"
+                onClick={() => setOpenRoutePlanSheet(true)}
+                className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
                 <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
                   {plan.os}
@@ -123,10 +124,7 @@ export function PlanningTable() {
                     )}
                   />
                 </TableCell>
-                <TableCell
-                  onClick={() => setOpenRoutePlanSheet(true)}
-                  className="py-0.5 text-sm font-medium whitespace-nowrap text-white"
-                >
+                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
                   <div className="bg-primary hover:bg-primary-dark mx-auto w-max cursor-pointer rounded-md p-1 transition duration-200">
                     <Eye />
                   </div>

@@ -69,7 +69,7 @@ export function Priorities() {
               className="m-0 text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
             >
               <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
-              Novo Material
+              Novo Equipamento
             </Button>
           </div>
         </CardHeader>

@@ -34,7 +34,8 @@ const TaskHeader = ({
       </div>
       <div className="flex flex-none items-center gap-4">
         <Button className="text-white" onClick={openCreateBoard}>
-          <Plus className="h-4 w-4 ltr:mr-1 rtl:ml-1" /> Programar OS
+          <Plus className="h-4 w-4 ltr:mr-1 rtl:ml-1" /> Nova Programação de
+          Rota
         </Button>
       </div>
     </div>

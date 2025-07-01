@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import axios from "axios";
-import { useCookies } from "next-client-cookies";
+import { Cookies, useCookies } from "next-client-cookies";
 import { createContext, useContext } from "react";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -26,6 +26,8 @@ interface ApiContextProps {
     auth: boolean,
   ) => Promise<{ status: number; body: any }>;
   IBGEAPI: (url: string) => Promise<{ status: number; body: any }>;
+  token: string | undefined;
+  cookies: Cookies;
 }
 
 const ApiContext = createContext<ApiContextProps | undefined>(undefined);
@@ -181,8 +183,10 @@ export const ApiContextProvider = ({ children }: ProviderProps) => {
         PostAPI,
         GetAPI,
         PutAPI,
+        token,
         DeleteAPI,
         IBGEAPI,
+        cookies,
       }}
     >
       {children}

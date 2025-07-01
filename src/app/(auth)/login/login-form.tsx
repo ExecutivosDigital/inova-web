@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useApiContext } from "@/context/ApiContext";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/utils/use-media-query";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { z } from "zod";
 
 const schema = z.object({
@@ -20,9 +22,10 @@ const schema = z.object({
     .min(4, { message: "Senha deve ter no mínimo 4 caracteres" }),
 });
 export function LogInForm() {
-  const [isPending] = React.useTransition();
+  const [isPending, startTransition] = React.useTransition();
   const [passwordType, setPasswordType] = React.useState("password");
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
+  const { PostAPI, token, cookies } = useApiContext();
 
   const togglePasswordType = () => {
     if (passwordType === "text") {
@@ -42,25 +45,26 @@ export function LogInForm() {
 
   const onSubmit = (data: { email: string; password: string }) => {
     console.log("data", data);
-    // startTransition(async () => {
-    //   const result = await PostAPI(
-    //     "/user/signin",
-    //     {
-    //       email: data.email,
-    //       password: data.password,
-    //     },
-    //     false,
-    //   );
-    //   if (result.status === 200) {
-    //     toast.success("Login realizado com sucesso!");
-    //     // cookies.set(token, result.body.accessToken);
-    //     // cookies.set(role, result.body.role);
-    //     reset();
-    //     window.location.href = "/";
-    //   } else {
-    //     toast.error(result.body.message);
-    //   }
-    // });
+    startTransition(async () => {
+      const result = await PostAPI(
+        "/user/signin",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        false,
+      );
+      console.log("result: ", result);
+
+      if (result.status === 200 && token) {
+        toast.success("Login realizado com sucesso!");
+        cookies.set(token, result.body.accessToken);
+        // cookies.set(role, result.body.role);
+        window.location.href = "/";
+      } else {
+        toast.error(result.body.message);
+      }
+    });
   };
   return (
     <div className="flex w-full flex-row">
@@ -180,7 +184,7 @@ export function LogInForm() {
             size={!isDesktop2xl ? "lg" : "md"}
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isPending ? "Loading..." : "Entrar"}
+            {isPending ? "Carregando..." : "Entrar"}
           </Button>
         </form>
 

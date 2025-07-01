@@ -1,5 +1,6 @@
 "use client";
 import { useDatePicker } from "@/context/DatePickerContext";
+import moment from "moment";
 import { useState } from "react";
 import { Matcher } from "react-day-picker";
 import { Button } from "./ui/button";
@@ -9,6 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 interface DatePickerProps {
@@ -45,17 +47,17 @@ export function DatePicker({
   return (
     <DropdownMenu open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
       <DropdownMenuTrigger className="self-end" asChild>
-        <button className="border-primary text-primary rounded-md border px-2 py-1 text-xs font-semibold focus:outline-none xl:px-4 xl:py-2 xl:text-sm">
+        <button className="border-primary hover:border-primary-dark hover:text-primary-dark text-primary cursor-pointer rounded-md border px-2 py-1 text-xs font-semibold transition duration-200 focus:outline-none xl:px-4 xl:py-2 xl:text-sm">
           {startDate.toLocaleDateString("pt-BR") +
             " - " +
             endDate.toLocaleDateString("pt-BR")}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="border-primary flex w-auto flex-col bg-white p-0 2xl:p-2"
+        className="border-primary flex w-auto flex-col bg-white p-2"
         align="end"
       >
-        <div className="flex gap-2">
+        <div className="hidden gap-2 lg:flex">
           <div className="flex flex-col">
             <Label className="mx-auto text-center text-lg font-semibold">
               Data de Início
@@ -98,6 +100,26 @@ export function DatePicker({
               }}
             />
           </div>
+        </div>
+        <div className="flex flex-col lg:hidden">
+          <Label className="mx-auto text-center text-lg">Data de Início</Label>
+          <Input
+            className="border-primary"
+            type="date"
+            value={moment(localStartDateFilter).format("YYYY-MM-DD")}
+            onChange={(e) => {
+              setLocalStartDateFilter(new Date(e.target.value));
+            }}
+          />
+          <Label className="mx-auto text-center text-lg">Data de Fim</Label>
+          <Input
+            className="border-primary"
+            type="date"
+            value={moment(localEndDateFilter).format("YYYY-MM-DD")}
+            onChange={(e) => {
+              setLocalEndDateFilter(new Date(e.target.value));
+            }}
+          />
         </div>
         <Button
           className="m-1 h-max py-1 text-white"

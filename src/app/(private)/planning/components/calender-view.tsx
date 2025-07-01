@@ -16,6 +16,8 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import ExternalDraggingevent from "./dragging-events";
+import NewRoutePlanSheet from "./NewRoutePlanSheet";
+import RoutePlanSheet from "./RoutePlanSheet";
 
 interface CalendarEventProps {
   id: string;
@@ -29,33 +31,29 @@ interface CalendarEventProps {
 }
 
 const CalendarView = () => {
-  // const [selectedEventDate] = useState<Date | null>(null);
-  // const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  // const [sheetOpen, setSheetOpen] = useState<boolean>(false);
-  // const [newEventSheetOpen, setNewEventSheetOpen] = useState<boolean>(false);
-  // const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
+  const [selectedEventDate] = useState<Date | null>(new Date());
+  const [openRoutePlanSheet, setOpenRoutePlanSheet] = useState<boolean>(false);
+  const [openNewRoutePlanSheet, setOpenNewRoutePlanSheet] =
+    useState<boolean>(false);
+  const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
   const [sidebarEvents] = React.useState<CalendarEventProps[] | null>([]);
-  // const [presetName, setPresetName] = useState<string>("");
   const isLg = useMediaQuery("(min-width: 1024px)");
 
-  // const handleEventClick = (arg: string) => {
-  //   setSelectedEventId(arg);
-  //   setSheetOpen(true);
-  // };
-  // const handleCloseModal = () => {
-  //   setSheetOpen(false);
-  // };
+  const handleCloseModal = () => {
+    setOpenRoutePlanSheet(false);
+  };
 
-  // const handleDateClick = (arg: any) => {
-  //   setNewEventSheetOpen(true);
-  //   setNewSelectedDate(arg.date);
-  // };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDateClick = (arg: any) => {
+    setOpenNewRoutePlanSheet(true);
+    setNewSelectedDate(arg.date);
+  };
 
-  // const handleCloseDateClick = () => {
-  //   setNewEventSheetOpen(false);
-  //   setNewSelectedDate(null);
-  // };
+  const handleCloseDateClick = () => {
+    setOpenNewRoutePlanSheet(false);
+    setNewSelectedDate(null);
+  };
 
   const handleClassName = () => {
     return "min-h-[40px] border-none transition duration-150 hover:-translate-y-0.5 hover:shadow-sm";
@@ -101,9 +99,9 @@ const CalendarView = () => {
   }
 
   const [dragEvents] = useState([
-    { title: "OS 1", id: "123465123612", tag: "business" },
-    { title: "OS 2", id: "64562346", tag: "business" },
-    { title: "OS 3", id: "374692348567", tag: "business" },
+    { title: "Rota 1", id: "123465123612", tag: "business" },
+    { title: "Rota 2", id: "64562346", tag: "business" },
+    { title: "Rota 3", id: "374692348567", tag: "business" },
   ]);
 
   useEffect(() => {
@@ -147,7 +145,7 @@ const CalendarView = () => {
           <CardContent className="h-full p-0">
             <CardHeader className="flex flex-row items-center gap-2 space-y-0 border-none pt-5 lg:gap-1 lg:px-1 lg:pt-2 xl:pt-5">
               <Button
-                // onClick={() => handleDateClick({ date: new Date() })}
+                onClick={() => handleDateClick({ date: new Date() })}
                 className="m-0 w-full text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
               >
                 <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
@@ -245,7 +243,7 @@ const CalendarView = () => {
                 selectable={true}
                 selectMirror={true}
                 // eventReceive={(info) => {
-                //   setNewEventSheetOpen(true);
+                //   setOpenNewRoutePlanSheet(true);
                 //   setNewSelectedDate(info.event.start);
                 //   info.revert();
                 // }}
@@ -253,7 +251,7 @@ const CalendarView = () => {
                 weekends={true}
                 eventClassNames={handleClassName}
                 eventContent={RenderEventContent}
-                // dateClick={handleDateClick}
+                dateClick={() => setOpenRoutePlanSheet(true)}
                 // eventClick={(arg) => handleEventClick(arg.event._def.publicId)}
                 initialView="dayGridMonth"
                 locale={ptBR}
@@ -284,7 +282,7 @@ const CalendarView = () => {
                   weekends={true}
                   eventClassNames={handleClassName}
                   eventContent={RenderEventContent}
-                  // dateClick={handleDateClick}
+                  dateClick={handleDateClick}
                   // eventClick={(arg) =>
                   //   handleEventClick(arg.event._def.publicId)
                   // }
@@ -299,23 +297,20 @@ const CalendarView = () => {
         </Card>
       </div>
 
-      {/* {selectedEventId && (
-        <EventSheet
-          open={sheetOpen}
+      {openRoutePlanSheet && (
+        <RoutePlanSheet
+          open={openRoutePlanSheet}
           onClose={handleCloseModal}
           selectedDate={selectedEventDate}
-          selectedEventId={selectedEventId}
         />
-      )} */}
-      {/* {newSelectedDate && (
-        <NewEventSheet
-          open={newEventSheetOpen}
+      )}
+      {newSelectedDate && (
+        <NewRoutePlanSheet
+          open={openNewRoutePlanSheet}
           onClose={handleCloseDateClick}
           selectedDate={newSelectedDate}
-          selectedEventId={selectedEventId}
-          presetName={presetName}
         />
-      )} */}
+      )}
     </>
   );
 };

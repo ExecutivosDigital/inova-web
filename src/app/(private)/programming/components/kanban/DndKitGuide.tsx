@@ -24,21 +24,16 @@ import {
 // Components
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import { activitySubTaskType } from "@/@staticData/activities/subtasks";
-import { activityTaskType } from "@/@staticData/activities/tasks";
 import { useApiContext } from "@/context/ApiContext";
+import NewRouteProgramSheet from "../NewRouteProgramSheet";
+import RouteProgramSheet from "../RouteProgramSheet";
 import Board from "./board";
-import EditClient from "./EditClient";
 import Task from "./task";
 import TaskHeader from "./task-header";
-import TaskSheet from "./task-sheet";
 
 interface Board {
   id: string;
   name: string;
-}
-interface DndKitGuideProps {
-  subTasks: activitySubTaskType[];
 }
 
 interface User {
@@ -101,7 +96,7 @@ export interface Boards {
   position: number;
   proposals: Proposal[];
 }
-export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
+export default function DnDKitGuide() {
   const { PutAPI } = useApiContext();
   const [boards, setBoards] = useState<Boards[]>([
     {
@@ -146,28 +141,12 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
     },
   ]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-  const [open, setOpen] = useState<boolean>(false);
-  const [open3, setOpen3] = useState<boolean>(false);
-  const [selectedTask] = useState<activityTaskType | undefined>(undefined);
-  const [selectedTaskId] = useState<activityTaskType["id"] | undefined>(
-    undefined,
-  );
   const [isClientSet] = useState<string | null | boolean>(null);
   const [newClientBoardId, setNewClientBoardId] = useState<string | null>(null);
-  const [openEditSheet, setOpenEditSheet] = useState(false);
-
-  const openCreateBoard = () => {
-    console.log("open: ", open);
-    setOpen(true);
-  };
-
-  // const closeCreateBoard = () => {
-  //   setOpen(false);
-  // };
-
-  const closeUpdateTaskHandler = () => {
-    setOpen3(false);
-  };
+  const [openRouteProgramSheet, setOpenRouteProgramSheet] =
+    useState<boolean>(false);
+  const [openNewRouteProgramSheet, setOpenNewRouteProgramSheet] =
+    useState<boolean>(false);
 
   // Find the value of the items
   function findValueOfItems(id: UniqueIdentifier | undefined, type: string) {
@@ -424,35 +403,8 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
   //   setQueryFilter("");
   //   setSelectedPage(1);
   // }, []);
-  const [selectedLead, setSelectedLead] = useState<Proposal | null>(null);
-  function handleEditSheet(task: Proposal) {
-    setSelectedLead(task);
-    setOpenEditSheet(true);
-  }
 
-  const [selectedFilter] = useState<string>("status");
   const [inputText, setInputText] = useState<string>("");
-  async function getProposalsByStatus() {
-    // const result = await GetAPI("/proposal-status/proposals", true);
-    // console.log("resultado status", result.body.status);
-    // setBoards(result.body.status);
-  }
-  async function getProposalsByType() {
-    // const result = await GetAPI("/proposal-type/proposals", true);
-    // console.log("resultado type", result);
-    // setBoards(result.body.types);
-  }
-  async function handleGetProposals() {
-    if (selectedFilter === "status") {
-      await getProposalsByStatus();
-    }
-    if (selectedFilter === "type") {
-      await getProposalsByType();
-    }
-  }
-  useEffect(() => {
-    handleGetProposals();
-  }, [selectedFilter]);
 
   return (
     <>
@@ -460,7 +412,7 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
       <Card className="overflow-y-auto">
         <CardHeader className="mb-6 border-none pt-6">
           <TaskHeader
-            openCreateBoard={openCreateBoard}
+            openCreateBoard={() => setOpenNewRouteProgramSheet(true)}
             setInputText={setInputText}
             inputText={inputText}
           />
@@ -497,13 +449,7 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
                             : true,
                         )
                         .map((i) => (
-                          <Task
-                            setOpenEditSheet={(e) => {
-                              handleEditSheet(e);
-                            }}
-                            client={i}
-                            key={i.id}
-                          />
+                          <Task client={i} key={i.id} />
                         ))}
                     </SortableContext>
                   </Board>
@@ -557,25 +503,16 @@ export default function DnDKitGuide({ subTasks }: DndKitGuideProps) {
           onClose={closeCreateBoard}
         />
       )} */}
-      {openEditSheet && (
-        <EditClient
-          onClose={() => {
-            setOpenEditSheet(false);
-            setSelectedLead(null);
-          }}
-          data={selectedLead}
-          open={openEditSheet}
-          handleRefresh={() => handleGetProposals()}
+      {openRouteProgramSheet && (
+        <RouteProgramSheet
+          open={openRouteProgramSheet}
+          onClose={() => setOpenRouteProgramSheet(false)}
         />
       )}
-
-      {open3 && (
-        <TaskSheet
-          open={open3}
-          onClose={closeUpdateTaskHandler}
-          task={selectedTask as activityTaskType}
-          taskId={selectedTaskId as activityTaskType["id"]}
-          subTasks={subTasks}
+      {openNewRouteProgramSheet && (
+        <NewRouteProgramSheet
+          open={openNewRouteProgramSheet}
+          onClose={() => setOpenNewRouteProgramSheet(false)}
         />
       )}
     </>

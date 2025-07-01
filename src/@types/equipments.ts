@@ -28,3 +28,15 @@ export interface EquipmentSetProps {
 export interface EquipmentSetsProps {
   sets: EquipmentSetProps[];
 }
+
+export interface EquipmentOsProps {
+  id: number;
+  eqp: string;
+  service: string;
+  worker: string;
+  consumption: string;
+  date: string;
+  status: string;
+  place: string;
+  placeCode: string;
+}

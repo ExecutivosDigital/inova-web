@@ -30,13 +30,17 @@ export function OsTable() {
         <span className="text-primary text-2xl font-bold">
           Ordens de Serviços - Rotas de Trabalho
         </span>
-        <div className="flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5">
-          <Search className="h-4 w-4 text-zinc-400" />
+        <label
+          htmlFor="search"
+          className="group focus-within:border-primary active:border-primary flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5 transition duration-200"
+        >
+          <Search className="group-focus-within:text-primary h-4 w-4 text-zinc-400 transition duration-200" />
           <input
-            className="flex-w h-full w-full bg-transparent text-zinc-400 outline-none placeholder:text-zinc-400"
+            id="search"
+            className="flex-w group-focus-within:placeholder:text-primary/20 group-focus-within:text-primary h-full w-full bg-transparent text-zinc-400 transition duration-200 outline-none placeholder:text-zinc-400"
             placeholder="Procurar"
           />
-        </div>
+        </label>
       </div>
       <Table>
         <TableHeader className="bg-primary/20">

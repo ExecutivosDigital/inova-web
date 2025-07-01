@@ -19,23 +19,23 @@ export function EquipmentSets() {
     null,
   );
 
-  console.log("selectedSet: ", selectedSet);
-  console.log("selectedSubset: ", selectedSubset);
-  console.log("selectedCip: ", selectedCip);
-
   return (
     <div className="flex w-full flex-col gap-4 p-4">
       <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
         <span className="text-primary text-2xl font-bold">
           Pontos do Equipamento
         </span>
-        <div className="flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5">
-          <Search className="h-4 w-4 text-zinc-400" />
+        <label
+          htmlFor="search"
+          className="group focus-within:border-primary active:border-primary flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5 transition duration-200"
+        >
+          <Search className="group-focus-within:text-primary h-4 w-4 text-zinc-400 transition duration-200" />
           <input
-            className="flex-w h-full w-full bg-transparent text-zinc-400 outline-none placeholder:text-zinc-400"
+            id="search"
+            className="flex-w group-focus-within:placeholder:text-primary/20 group-focus-within:text-primary h-full w-full bg-transparent text-zinc-400 transition duration-200 outline-none placeholder:text-zinc-400"
             placeholder="Procurar"
           />
-        </div>
+        </label>
       </div>
       <div className="flex w-full flex-col overflow-x-scroll xl:overflow-x-auto">
         <div className="text-primary bg-primary/20 flex h-12 w-max items-center px-4 font-bold xl:w-full">
@@ -48,27 +48,28 @@ export function EquipmentSets() {
             {equipmentSets.sets?.map((set) => (
               <div
                 key={`set + ${set.id}`}
-                className="flex items-center gap-2 p-2"
+                className="flex cursor-pointer items-center gap-2 p-2"
+                onClick={() => {
+                  if (selectedSet === set) {
+                    setSelectedSet(null);
+                    setSelectedSubset(null);
+                    setSelectedCip(null);
+                  } else {
+                    setSelectedSet(set);
+                    setSelectedSubset(null);
+                    setSelectedCip(null);
+                  }
+                }}
               >
-                <div className="text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold">
+                <div
+                  className={cn(
+                    "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                    selectedSet?.id === set.id && "bg-primary text-white",
+                  )}
+                >
                   <span>1.1</span>
                 </div>
-                <span
-                  className="w-max cursor-pointer"
-                  onClick={() => {
-                    if (selectedSet === set) {
-                      setSelectedSet(null);
-                      setSelectedSubset(null);
-                      setSelectedCip(null);
-                    } else {
-                      setSelectedSet(set);
-                      setSelectedSubset(null);
-                      setSelectedCip(null);
-                    }
-                  }}
-                >
-                  {set.name}
-                </span>
+                <span className="w-max">{set.name}</span>
               </div>
             ))}
           </div>
@@ -87,25 +88,27 @@ export function EquipmentSets() {
                 ?.subsets?.map((subset) => (
                   <div
                     key={`subset + ${subset.id}`}
-                    className="flex items-center gap-2 p-2"
+                    className="flex cursor-pointer items-center gap-2 p-2"
+                    onClick={() => {
+                      if (selectedSubset === subset) {
+                        setSelectedSubset(null);
+                        setSelectedCip(null);
+                      } else {
+                        setSelectedSubset(subset);
+                        setSelectedCip(null);
+                      }
+                    }}
                   >
-                    <div className="text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold">
+                    <div
+                      className={cn(
+                        "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                        selectedSubset?.id === subset.id &&
+                          "bg-primary text-white",
+                      )}
+                    >
                       <span>1.1</span>
                     </div>
-                    <span
-                      className="w-max cursor-pointer"
-                      onClick={() => {
-                        if (selectedSubset === subset) {
-                          setSelectedSubset(null);
-                          setSelectedCip(null);
-                        } else {
-                          setSelectedSubset(subset);
-                          setSelectedCip(null);
-                        }
-                      }}
-                    >
-                      {subset.name}
-                    </span>
+                    <span className="w-max">{subset.name}</span>
                   </div>
                 ))
             ) : (
@@ -134,22 +137,23 @@ export function EquipmentSets() {
                   <div
                     key={`cip + ${cip.id}`}
                     className="flex items-center gap-2 p-2"
+                    onClick={() => {
+                      if (selectedCip === cip) {
+                        setSelectedCip(null);
+                      } else {
+                        setSelectedCip(cip);
+                      }
+                    }}
                   >
-                    <div className="text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold">
+                    <div
+                      className={cn(
+                        "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                        selectedCip?.id === cip.id && "bg-primary text-white",
+                      )}
+                    >
                       <span>1.1</span>
                     </div>
-                    <span
-                      className="w-max cursor-pointer"
-                      onClick={() => {
-                        if (selectedCip === cip) {
-                          setSelectedCip(null);
-                        } else {
-                          setSelectedCip(cip);
-                        }
-                      }}
-                    >
-                      {cip.name}
-                    </span>
+                    <span className="w-max">{cip.name}</span>
                   </div>
                 ))
             ) : (

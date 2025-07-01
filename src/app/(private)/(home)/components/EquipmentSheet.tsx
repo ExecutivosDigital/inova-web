@@ -39,7 +39,7 @@ const schema = z.object({
   endDate: z.date(),
 });
 
-const EquipmentOsSheet = ({
+const EquipmentSheet = ({
   open,
   onClose,
   selectedDate,
@@ -401,7 +401,7 @@ const EquipmentOsSheet = ({
                       Excluindo...
                     </>
                   ) : (
-                    "Excluir Ordem de Serviço"
+                    "Excluir Equipamento"
                   )}
                 </Button>
                 <Button disabled={isEditing} type="submit" className="flex-1">
@@ -411,7 +411,7 @@ const EquipmentOsSheet = ({
                       Editando...
                     </>
                   ) : (
-                    "Editar Ordem de Serviço"
+                    "Editar Equipamento"
                   )}
                 </Button>
               </div>
@@ -423,4 +423,4 @@ const EquipmentOsSheet = ({
   );
 };
 
-export default EquipmentOsSheet;
+export default EquipmentSheet;

@@ -401,7 +401,7 @@ const MaterialOsSheet = ({
                       Excluindo...
                     </>
                   ) : (
-                    "Excluir Rota de Serviço"
+                    "Excluir Ordem de Serviço"
                   )}
                 </Button>
                 <Button disabled={isEditing} type="submit" className="flex-1">
@@ -411,7 +411,7 @@ const MaterialOsSheet = ({
                       Editando...
                     </>
                   ) : (
-                    "Editar Rota de Serviço"
+                    "Editar Ordem de Serviço"
                   )}
                 </Button>
               </div>

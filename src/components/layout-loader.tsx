@@ -5,7 +5,7 @@ const LayoutLoader = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center space-y-2">
       <Image
-        src="/images/logo/icon-white.png"
+        src="/logo/logo.png"
         alt=""
         width={100}
         height={100}

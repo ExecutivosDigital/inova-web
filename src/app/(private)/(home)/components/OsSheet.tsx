@@ -39,7 +39,7 @@ const schema = z.object({
   endDate: z.date(),
 });
 
-const EquipmentOsSheet = ({
+const OsSheet = ({
   open,
   onClose,
   selectedDate,
@@ -423,4 +423,4 @@ const EquipmentOsSheet = ({
   );
 };
 
-export default EquipmentOsSheet;
+export default OsSheet;

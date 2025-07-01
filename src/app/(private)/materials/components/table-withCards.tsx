@@ -16,12 +16,14 @@ import {
 
 // avatar
 
+import { Button } from "@/components/ui/button";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import { cn } from "@/lib/utils";
 import { materials } from "@/mock/materials";
-import { Eye, LayersIcon, Search } from "lucide-react";
+import { Eye, LayersIcon, Plus, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { NewMaterialModal } from "./NewMaterialModal";
 
 const TableWithCards = () => {
   const router = useRouter();
@@ -38,9 +40,10 @@ const TableWithCards = () => {
     { key: "actions", label: "Ações" },
   ];
 
-  const [selectedFilter, setSelectedFilter] = useState("Todos");
   const [materialPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [openNewMaterialModal, setOpenNewMaterialModal] =
+    useState<boolean>(false);
 
   return (
     <>
@@ -67,35 +70,13 @@ const TableWithCards = () => {
                 placeholder="Procurar"
               />
             </label>
-            <div className="bg-primary/50 flex items-center gap-4 rounded-md px-2 py-1">
-              <div
-                onClick={() => setSelectedFilter("Todos")}
-                className={cn(
-                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                  selectedFilter === "Todos" && "bg-primary",
-                )}
-              >
-                Todos
-              </div>
-              <div
-                onClick={() => setSelectedFilter("Normal")}
-                className={cn(
-                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                  selectedFilter === "Normal" && "bg-primary",
-                )}
-              >
-                Normal
-              </div>
-              <div
-                onClick={() => setSelectedFilter("Baixo")}
-                className={cn(
-                  "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                  selectedFilter === "Baixo" && "bg-primary",
-                )}
-              >
-                Baixo
-              </div>
-            </div>
+            <Button
+              onClick={() => setOpenNewMaterialModal(true)}
+              className="m-0 text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
+            >
+              <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
+              Novo Material
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="overflow-x-auto px-0 pb-0">
@@ -173,6 +154,12 @@ const TableWithCards = () => {
           />
         </CardFooter>
       </Card>
+      {openNewMaterialModal && (
+        <NewMaterialModal
+          isOpen={openNewMaterialModal}
+          close={() => setOpenNewMaterialModal(false)}
+        />
+      )}
     </>
   );
 };

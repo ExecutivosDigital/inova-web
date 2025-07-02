@@ -19,13 +19,13 @@ const schema = z.object({
   email: z.string().email({ message: "Insira um email válido" }),
   password: z
     .string()
-    .min(4, { message: "Senha deve ter no mínimo 4 caracteres" }),
+    .min(3, { message: "Senha deve ter no mínimo 3 caracteres" }),
 });
 export function LogInForm() {
   const [isPending, startTransition] = React.useTransition();
   const [passwordType, setPasswordType] = React.useState("password");
   const isDesktop2xl = useMediaQuery("(max-width: 1530px)");
-  const { PostAPI, token, cookies } = useApiContext();
+  const { PostAPI, cookies } = useApiContext();
 
   const togglePasswordType = () => {
     if (passwordType === "text") {
@@ -54,18 +54,21 @@ export function LogInForm() {
         },
         false,
       );
-      console.log("result: ", result);
 
-      if (result.status === 200 && token) {
+      if (result.status === 200 && process.env.NEXT_PUBLIC_USER_TOKEN) {
         toast.success("Login realizado com sucesso!");
-        cookies.set(token, result.body.accessToken);
+        cookies.set(
+          process.env.NEXT_PUBLIC_USER_TOKEN,
+          result.body.accessToken,
+        );
         // cookies.set(role, result.body.role);
         window.location.href = "/";
       } else {
-        toast.error(result.body.message);
+        toast.error("Email ou senha incorretos!");
       }
     });
   };
+
   return (
     <div className="flex w-full flex-row">
       <div className="mx-auto w-full max-w-[600px]">

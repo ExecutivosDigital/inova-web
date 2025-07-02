@@ -15,7 +15,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useEquipmentContext } from "@/context/EquipmentContext";
-import { useLayoutContext } from "@/context/LayoutContext";
 import { useServiceContext } from "@/context/ServiceContext";
 
 import { cn } from "@/lib/utils";
@@ -31,14 +30,11 @@ export function EquipmentServiceAccordion({
   selectedEquipmentStep,
   setSelectedEquipmentStep,
 }: EquipmentServiceAccordionProps) {
-  const { layoutData } = useLayoutContext();
   const { equipmentData, setEquipmentData } = useEquipmentContext();
   const { serviceData } = useServiceContext();
 
   const [isImportHovered, setIsImportHovered] = useState(false);
-  const [selectedSector, setSelectedSector] = useState<SectorProps | null>(
-    null,
-  );
+  const [selectedSector] = useState<SectorProps | null>(null);
   const [equipmentPages, setEquipmentPages] = useState<number>(1);
   const [servicePages, setServicePages] = useState<number>(1);
   const [currentEquipmentPage, setCurrentEquipmentPage] = useState(1);
@@ -161,11 +157,6 @@ export function EquipmentServiceAccordion({
       data.lubricantPoints !== ""
     );
   };
-
-  useEffect(() => {
-    console.log("layoutData: ", layoutData);
-    console.log("setSelectedSector: ", setSelectedSector);
-  }, []);
 
   return (
     <AccordionItem value="5" onClick={() => setSelectedEquipmentStep(5)}>

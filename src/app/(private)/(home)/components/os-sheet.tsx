@@ -112,16 +112,7 @@ export function OsSheet({ open, onClose, selectedOs }: OsSheetProps) {
     }
 
     setIsEditing(true);
-
-    try {
-      const formData = form.getValues();
-      console.log("Form data to submit:", formData);
-      onClose();
-    } catch (error) {
-      console.error("Error updating OS:", error);
-    } finally {
-      setIsEditing(false);
-    }
+    setIsEditing(false);
   }
 
   async function HandleDeleteOs() {

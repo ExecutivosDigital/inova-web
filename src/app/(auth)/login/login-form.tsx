@@ -44,7 +44,6 @@ export function LogInForm() {
   });
 
   const onSubmit = (data: { email: string; password: string }) => {
-    console.log("data", data);
     startTransition(async () => {
       const result = await PostAPI(
         "/user/signin",

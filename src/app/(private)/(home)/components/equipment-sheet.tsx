@@ -140,16 +140,7 @@ export function EquipmentSheet({
     }
 
     setIsEditing(true);
-
-    try {
-      const formData = form.getValues();
-      console.log("Form data to submit:", formData);
-      onClose();
-    } catch (error) {
-      console.error("Error updating Equipment:", error);
-    } finally {
-      setIsEditing(false);
-    }
+    setIsEditing(false);
   }
 
   async function HandleDeleteEquipment() {

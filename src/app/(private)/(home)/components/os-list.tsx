@@ -1,14 +1,17 @@
 "use client";
+import { DashboardOsProps } from "@/@types/dashboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { dashboardOs } from "@/mock/dashboard";
 import { CheckCheck, ChevronRight, Info } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import OsSheet from "./OsSheet";
+import { OsSheet } from "./os-sheet";
 
 export function OsList() {
   const [selectedList, setSelectedList] = useState<string>("Concluídas");
   const [openOsSheet, setOpenOsSheet] = useState<boolean>(false);
+  const [selectedOs, setSelectedOs] = useState<DashboardOsProps | null>(null);
 
   return (
     <>
@@ -27,10 +30,13 @@ export function OsList() {
         </div>
         <div className="flex h-[calc(100%-80px)] w-full flex-col">
           <ScrollArea className="h-full w-full">
-            {Array.from({ length: 20 }).map((_, i) => (
+            {dashboardOs.map((os, i) => (
               <div
                 key={i}
-                onClick={() => setOpenOsSheet(true)}
+                onClick={() => {
+                  setSelectedOs(os);
+                  setOpenOsSheet(true);
+                }}
                 className="group hover:bg-primary/20 flex w-full cursor-pointer items-center justify-between gap-2 border-b px-2 py-1 transition duration-200 xl:px-4 xl:py-2"
               >
                 <div className="flex items-center gap-2">
@@ -86,8 +92,12 @@ export function OsList() {
           </div>
         </div>
       </div>
-      {openOsSheet && (
-        <OsSheet open={openOsSheet} onClose={() => setOpenOsSheet(false)} />
+      {selectedOs && (
+        <OsSheet
+          open={openOsSheet}
+          onClose={() => setOpenOsSheet(false)}
+          selectedOs={selectedOs}
+        />
       )}
     </>
   );

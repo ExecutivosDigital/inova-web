@@ -44,7 +44,7 @@ export function DashboardGraphs() {
     },
     colors: ["#ed6842a0"],
     tooltip: {
-      theme: "dark",
+      theme: "light",
     },
     xaxis: {
       categories: [
@@ -103,7 +103,7 @@ export function DashboardGraphs() {
     },
     colors: ["#ed6842a0"],
     tooltip: {
-      theme: "dark",
+      theme: "light",
     },
     xaxis: {
       categories: [

@@ -2,7 +2,7 @@ export interface DashboardOsProps {
   id: number;
   worker: string;
   service: string;
-  key: string;
+  os: string;
   executed: string;
   spent: string;
   status: string;

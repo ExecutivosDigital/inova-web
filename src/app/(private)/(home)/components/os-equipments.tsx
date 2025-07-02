@@ -1,4 +1,5 @@
 "use client";
+import { DashboardEquipmentProps } from "@/@types/dashboard";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
   DropdownMenu,
@@ -18,7 +19,7 @@ import { dashboardEquipments } from "@/mock/dashboard";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { Info, Search } from "lucide-react";
 import { useState } from "react";
-import EquipmentSheet from "./EquipmentSheet";
+import { EquipmentSheet } from "./equipment-sheet";
 
 export function OsEquipments() {
   const columns = [
@@ -35,6 +36,8 @@ export function OsEquipments() {
   const [osPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openEquipmentSheet, setOpenEquipmentSheet] = useState<boolean>(false);
+  const [selectedEquipment, setSelectedEquipment] =
+    useState<DashboardEquipmentProps | null>(null);
 
   return (
     <>
@@ -72,7 +75,10 @@ export function OsEquipments() {
             {dashboardEquipments.map((equipment) => (
               <TableRow
                 key={equipment.id}
-                onClick={() => setOpenEquipmentSheet(true)}
+                onClick={() => {
+                  setSelectedEquipment(equipment);
+                  setOpenEquipmentSheet(true);
+                }}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
                 <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap" />
@@ -132,10 +138,11 @@ export function OsEquipments() {
           />
         </div>
       </div>
-      {openEquipmentSheet && (
+      {selectedEquipment && (
         <EquipmentSheet
           open={openEquipmentSheet}
           onClose={() => setOpenEquipmentSheet(false)}
+          selectedEquipment={selectedEquipment}
         />
       )}
     </>

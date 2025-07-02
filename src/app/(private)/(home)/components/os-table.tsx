@@ -1,4 +1,5 @@
 "use client";
+import { DashboardOsProps } from "@/@types/dashboard";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
   Table,
@@ -12,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { dashboardOs } from "@/mock/dashboard";
 import { Info, Search } from "lucide-react";
 import { useState } from "react";
-import OsSheet from "./OsSheet";
+import { OsSheet } from "./os-sheet";
 
 export function OsTable() {
   const columns = [
@@ -24,6 +25,7 @@ export function OsTable() {
   ];
   const [osPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedOs, setSelectedOs] = useState<DashboardOsProps | null>(null);
   const [openOsSheet, setOpenOsSheet] = useState<boolean>(false);
 
   return (
@@ -62,7 +64,10 @@ export function OsTable() {
             {dashboardOs.map((os) => (
               <TableRow
                 key={os.id}
-                onClick={() => setOpenOsSheet(true)}
+                onClick={() => {
+                  setSelectedOs(os);
+                  setOpenOsSheet(true);
+                }}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
                 <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
@@ -72,7 +77,7 @@ export function OsTable() {
                   {os.service}
                 </TableCell>
                 <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {os.key}
+                  {os.os}
                 </TableCell>
                 <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
                   {os.executed}
@@ -100,8 +105,12 @@ export function OsTable() {
           />
         </div>
       </div>
-      {openOsSheet && (
-        <OsSheet open={openOsSheet} onClose={() => setOpenOsSheet(false)} />
+      {selectedOs && (
+        <OsSheet
+          open={openOsSheet}
+          onClose={() => setOpenOsSheet(false)}
+          selectedOs={selectedOs}
+        />
       )}
     </>
   );

@@ -54,7 +54,7 @@ const Header = () => {
   return (
     <ClassicHeader
       className={cn(" ", {
-        "sticky top-0 z-[1000]": navbarType === "sticky",
+        "sticky top-0 z-[99]": navbarType === "sticky",
       })}
     >
       <div className="w-full border-b border-b-white bg-white px-[15px] py-0 backdrop-blur-lg md:px-6 2xl:py-3">

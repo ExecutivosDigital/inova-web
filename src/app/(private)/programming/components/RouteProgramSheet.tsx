@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -13,172 +22,128 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { ChangeEventHandler, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-
-import { Calendar } from "@/components/ui/calendar";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, Edit2, Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { useForm, UseFormReturn } from "react-hook-form";
+import toast from "react-hot-toast";
+import CreatableSelect from "react-select/creatable";
 import { z } from "zod";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { setHours, setMinutes } from "date-fns";
-import CreatableSelect from "react-select/creatable";
-
-interface EditedEventDataProps {
-  name: string;
-  description: string;
-  attendees: string[];
-}
-
-const schema = z.object({
-  title: z.string().min(3, { message: "Required" }),
-  description: z.string().min(3, { message: "Required" }),
-  attendees: z.array(z.string()).min(1, { message: "Required" }),
-  startDate: z.date(),
-  endDate: z.date(),
+const optionsSchema = z.object({
+  label: z.string(),
+  value: z.string(),
 });
 
-const RouteProgramSheet = ({
-  open,
-  onClose,
-  selectedDate,
-}: {
+const FormSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Responsável é obrigatório")
+    .min(2, "Responsável deve ter pelo menos 2 caracteres."),
+  description: z.string().optional(),
+  attendees: z
+    .array(optionsSchema)
+    .min(1, { message: "Selecione pelo menos um participante" }),
+  date: z.date(),
+});
+
+interface RouteProgramSheetProps {
   open: boolean;
   onClose: () => void;
   selectedDate?: Date | null;
-}) => {
-  // const [event] = useState<EventDataProps | undefined>();
-  const [editedEventData, setEditedEventData] = useState<EditedEventDataProps>({
-    name: "",
-    description: "",
-    attendees: [],
+}
+
+export function RouteProgramSheet({
+  open,
+  onClose,
+  selectedDate,
+}: RouteProgramSheetProps) {
+  const [isCreating, setIsCreating] = useState(false);
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      description: "",
+      attendees: [],
+      date: selectedDate || new Date(),
+    },
   });
 
-  const [selectedStart, setSelectedStart] = useState<Date | undefined>(
-    selectedDate || new Date(),
-  );
-  const [timeValueStart, setTimeValueStart] = useState<string>(
-    selectedDate
-      ? selectedDate.toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      : "12:00",
-  );
+  const useFormSteps = (form: UseFormReturn<z.infer<typeof FormSchema>>) => {
+    const [activeStep, setActiveStep] = useState(0);
 
-  const [selectedEnd, setSelectedEnd] = useState<Date | undefined>(
-    selectedDate
-      ? new Date(selectedDate.getTime() + 60 * 60 * 1000)
-      : new Date(new Date().getTime() + 60 * 60 * 1000),
-  );
-  const [timeValueEnd, setTimeValueEnd] = useState<string>(
-    selectedDate
-      ? new Date(selectedDate.getTime() + 60 * 60 * 1000).toLocaleTimeString(
-          "pt-BR",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          },
-        )
-      : "13:00",
-  );
-  const [editable, setEditable] = useState(false);
-  const [isEditing] = useState(false);
-  const [isStartTimePopoverOpen, setIsStartTimePopoverOpen] = useState(false);
-  const [isEndTimePopoverOpen, setIsEndTimePopoverOpen] = useState(false);
-  const [isDeleting] = useState(false);
-  const { control, handleSubmit } = useForm({
-    resolver: zodResolver(schema),
-    mode: "all",
-  });
+    const stepFields = {
+      0: ["title", "description", "attendees", "date"] as const,
+    };
 
-  // useEffect(() => {
-  //   if (event) {
-  //     setEditedEventData({
-  //       name: event?.title,
-  //       description: event?.description || "",
-  //       attendees: event?.attendees
-  //         ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //           event?.attendees.map((attendee: any) => attendee?.email)
-  //         : [],
-  //     });
-  //     setSelectedStart(event?.start);
-  //     setSelectedEnd(event?.end);
-  //     setTimeValueStart(
-  //       new Date(event?.start).toLocaleTimeString("pt-BR", {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //     );
-  //     setTimeValueEnd(
-  //       new Date(event?.end).toLocaleTimeString("pt-BR", {
-  //         hour: "2-digit",
-  //         minute: "2-digit",
-  //       }),
-  //     );
-  //   }
-  // }, [event]);
+    const validateStep = async (step: number) => {
+      const fields = stepFields[step as keyof typeof stepFields];
+      if (!fields) return true;
+      return await form.trigger(fields);
+    };
 
-  const handleTimeChangeStart: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!selectedStart) {
-      setTimeValueStart(time);
-      return;
-    }
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selectedStart, minutes), hours);
-    setSelectedStart(newSelectedDate);
-    setTimeValueStart(time);
+    return { activeStep, validateStep, setActiveStep };
   };
 
-  const handleDaySelectStart = (date: Date | undefined) => {
-    if (!timeValueStart || !date) {
-      setSelectedStart(date);
-      return;
-    }
-    const [hours, minutes] = timeValueStart
-      .split(":")
-      .map((str) => parseInt(str, 10));
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes,
-    );
-    setSelectedStart(newDate);
-  };
+  const { validateStep } = useFormSteps(form);
 
-  const handleTimeChangeEnd: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!selectedEnd) {
-      setTimeValueEnd(time);
-      return;
-    }
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selectedEnd, minutes), hours);
-    setSelectedEnd(newSelectedDate);
-    setTimeValueEnd(time);
-  };
+  async function HandleCreateEquipment() {
+    const isValid = await validateStep(0);
 
-  const handleDaySelectEnd = (date: Date | undefined) => {
-    if (!timeValueEnd || !date) {
-      setSelectedEnd(date);
-      return;
+    if (!isValid) {
+      const errors = form.formState.errors;
+
+      // Define field labels with proper typing
+      const fieldLabels: Record<keyof z.infer<typeof FormSchema>, string> = {
+        title: "Título",
+        description: "Descrição",
+        attendees: "Participantes",
+        date: "Data",
+      };
+
+      // Get first error with type safety
+      const firstErrorField = Object.keys(
+        errors,
+      )[0] as keyof typeof fieldLabels;
+      const firstError = errors[firstErrorField];
+
+      if (firstError?.message && firstErrorField in fieldLabels) {
+        const fieldLabel = fieldLabels[firstErrorField];
+        return toast.error(`${fieldLabel}: ${firstError.message}`);
+      }
+
+      return toast.error("Por favor, corrija os erros no formulário.");
     }
-    const [hours, minutes] = timeValueEnd
-      .split(":")
-      .map((str) => parseInt(str, 10));
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes,
-    );
-    setSelectedEnd(newDate);
-  };
+
+    setIsCreating(true);
+    toast.success("Planejamento criado com sucesso!");
+    return setIsCreating(false);
+  }
+
+  useEffect(() => {
+    if (selectedDate && open) {
+      form.reset({
+        title: "",
+        description: "",
+        attendees: [],
+        date: selectedDate,
+      });
+    }
+  }, [selectedDate, open, form]);
+
+  useEffect(() => {
+    if (!open) {
+      form.reset({
+        title: "",
+        description: "",
+        attendees: [],
+        date: selectedDate || new Date(),
+      });
+    }
+  }, [open, form]);
 
   return (
     <>
@@ -186,241 +151,151 @@ const RouteProgramSheet = ({
         <SheetContent
           onPointerDownOutside={onClose}
           onClose={onClose}
-          className="h-screen px-0"
+          className="no-scrollbar h-screen px-0"
         >
-          <SheetHeader className="flex-row items-center justify-between px-6">
-            <SheetTitle>Lorem lipsum</SheetTitle>
-            <button
-              onClick={() => setEditable(!editable)}
-              className={cn(
-                "border-default-500 text-primary hover:bg-primary flex cursor-pointer items-center justify-between rounded border p-1 shadow transition duration-100 hover:-translate-y-0.5 hover:text-white",
-                editable && "bg-primary -translate-y-0.5 text-white",
-              )}
-            >
-              <Edit2 className="h-4 w-4" />
-            </button>
-          </SheetHeader>
-          <div className="mt-6 h-full">
-            <form className="h-full" onSubmit={handleSubmit(console.log)}>
-              <div className="h-[calc(100vh-200px)]">
-                <ScrollArea className="h-full">
-                  <div className="space-y-4 px-6 pb-5">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="title">
-                        Lorem lipsum <span className="font-bold">*</span>
-                      </Label>
-                      <Input
-                        disabled={!editable}
-                        id="title"
-                        type="text"
-                        placeholder="Lorem lipsum"
-                        value={editedEventData?.name}
-                        onChange={(e) =>
-                          setEditedEventData({
-                            ...editedEventData,
-                            name: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <Label htmlFor="description">Lorem lipsum</Label>
-                      <Input
-                        disabled={!editable}
-                        id="description"
-                        type="text"
-                        placeholder="Lorem lipsum"
-                        value={editedEventData?.description}
-                        onChange={(e) =>
-                          setEditedEventData({
-                            ...editedEventData,
-                            description: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="startDate" className="mb-1.5">
-                        Lorem lipsum <span className="font-bold">*</span>
-                      </Label>
-                      <Popover
-                        open={isStartTimePopoverOpen}
-                        onOpenChange={() =>
-                          setIsStartTimePopoverOpen(!isStartTimePopoverOpen)
-                        }
-                      >
-                        <PopoverTrigger asChild>
-                          <Button
-                            disabled={!editable}
-                            variant="outline"
-                            className="border-default-200 text-default-600 w-full justify-between text-left font-normal"
-                          >
-                            Lorem lipsum
-                            {/* {selectedStart
-                              ? new Date(selectedStart).toLocaleDateString(
-                                  "pt-BR",
-                                  {
-                                    month: "numeric",
-                                    day: "numeric",
-                                  },
-                                )
-                              : ""}
-                            {""} - {timeValueStart}h */}
-                            <CalendarIcon className="h-4 w-4" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="z-[99999] w-auto p-0">
-                          <Controller
-                            name="startDate"
-                            control={control}
-                            render={() => (
-                              <Calendar
-                                mode="single"
-                                selected={selectedStart}
-                                onSelect={(e) => {
-                                  handleDaySelectStart(e);
-                                  setIsStartTimePopoverOpen(false);
-                                }}
+          <ScrollArea className="h-full">
+            <SheetHeader className="px-6">
+              <SheetTitle>Nova Programação de Rota</SheetTitle>
+            </SheetHeader>
+            <div className="mt-6 h-full">
+              <Form {...form}>
+                <div className="h-[calc(100vh-200px)]">
+                  <ScrollArea className="h-full">
+                    <div className="space-y-4 px-6 pb-5">
+                      <FormField
+                        key="title"
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Título</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Título"
+                                {...field}
+                                disabled={isCreating}
+                                className={cn("", {
+                                  "border-destructive focus:border-destructive text-text-100 rounded-md":
+                                    form.formState.errors.title,
+                                })}
+                                autoComplete="off"
                               />
-                            )}
-                          />
-                          <div className="bg-primary/10 flex w-full items-center justify-between p-2 font-semibold">
-                            <span>Hora: </span>
-                            <input
-                              type="time"
-                              value={timeValueStart}
-                              onChange={handleTimeChangeStart}
-                              step="60"
-                              className="focus:border-primary focus:outline-primary focus:ring-primary bg-transparent"
-                            />
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="endDate" className="mb-1.5">
-                        Lorem lipsum
-                        <span className="font-bold">*</span>
-                      </Label>
-                      <Popover
-                        open={isEndTimePopoverOpen}
-                        onOpenChange={() =>
-                          setIsEndTimePopoverOpen(!isEndTimePopoverOpen)
-                        }
-                      >
-                        <PopoverTrigger asChild>
-                          <Button
-                            disabled={!editable}
-                            variant="outline"
-                            className="border-default-200 text-default-600 w-full justify-between text-left font-normal"
-                          >
-                            Lorem lipsum
-                            {/* {selectedEnd
-                              ? new Date(selectedEnd).toLocaleDateString(
-                                  "pt-BR",
-                                  {
-                                    month: "numeric",
-                                    day: "numeric",
-                                  },
-                                )
-                              : ""}
-                            {""} - {timeValueEnd}h */}
-                            <CalendarIcon className="h-4 w-4" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="z-[99999] w-auto p-0">
-                          <Controller
-                            name="endDate"
-                            control={control}
-                            render={() => (
-                              <Calendar
-                                mode="single"
-                                selected={selectedEnd}
-                                onSelect={(e) => {
-                                  handleDaySelectEnd(e);
-                                  setIsEndTimePopoverOpen(false);
-                                }}
-                              />
-                            )}
-                          />
-                          <div className="bg-primary/10 flex w-full items-center justify-between p-2 font-semibold">
-                            <span>Hora: </span>
-                            <input
-                              type="time"
-                              value={timeValueEnd}
-                              onChange={handleTimeChangeEnd}
-                              step="60"
-                              className="focus:border-primary focus:outline-primary focus:ring-primary bg-transparent"
-                            />
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="endDate" className="mb-1.5">
-                        Lorem lipsum
-                      </Label>
-                      <CreatableSelect
-                        components={{
-                          DropdownIndicator: null,
-                        }}
-                        isDisabled={!editable}
-                        className="w-full"
-                        isMulti
-                        placeholder="Lorem lipsum"
-                        value={editedEventData.attendees?.map(
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          (event: any) => ({
-                            value: event,
-                            label: event,
-                          }),
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
                         )}
-                        onChange={(e) =>
-                          setEditedEventData({
-                            ...editedEventData,
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            attendees: e.map((event: any) => event.value),
-                          })
-                        }
-                        noOptionsMessage={() => "Lorem lipsum"}
+                      />
+
+                      <FormField
+                        key="description"
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Descrição</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Descrição"
+                                {...field}
+                                disabled={isCreating}
+                                className={cn("", {
+                                  "border-destructive focus:border-destructive text-text-100 rounded-md":
+                                    form.formState.errors.description,
+                                })}
+                                autoComplete="off"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data e Hora de Início *</FormLabel>
+                            <div className="flex gap-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <FormControl>
+                                    <div className="flex h-9 w-full items-center justify-between rounded-lg border border-zinc-400 px-2">
+                                      {field.value
+                                        ? moment(
+                                            field.value,
+                                            "dd/MM/yyyy",
+                                          ).format("DD/MM/YYYY")
+                                        : "Selecione a data"}
+                                      <CalendarIcon className="h-4 w-4" />
+                                    </div>
+                                  </FormControl>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange} // Directly controlled by form
+                                    disabled={(date) => date < new Date()}
+                                  />
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="attendees"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Participantes</FormLabel>
+                            <FormControl>
+                              <CreatableSelect
+                                {...field}
+                                isMulti
+                                placeholder="Selecione participantes"
+                                onCreateOption={(inputValue) => {
+                                  const newOption = {
+                                    label: inputValue,
+                                    value: inputValue
+                                      .toLowerCase()
+                                      .replace(/\s+/g, "."),
+                                  };
+                                  field.onChange([...field.value, newOption]);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
+                        )}
                       />
                     </div>
-                  </div>
-                </ScrollArea>
-              </div>
-              <div className="flex flex-wrap gap-2 px-6 pb-12">
-                <Button variant="outline">
-                  {isDeleting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Excluindo...
-                    </>
-                  ) : (
-                    "Excluir Programação"
-                  )}
-                </Button>
-                <Button disabled={isEditing} type="submit" className="flex-1">
-                  {isEditing ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Editando...
-                    </>
-                  ) : (
-                    "Editar Programação"
-                  )}
-                </Button>
-              </div>
-            </form>
-          </div>
+                  </ScrollArea>
+                </div>
+                <div className="flex flex-wrap gap-2 px-6 pb-12">
+                  <Button
+                    type="button"
+                    disabled={isCreating}
+                    onClick={HandleCreateEquipment}
+                    className="flex-1"
+                  >
+                    {isCreating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Salvando...
+                      </>
+                    ) : (
+                      "Salvar Programação de Rota"
+                    )}
+                  </Button>
+                </div>{" "}
+              </Form>
+            </div>
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </>
   );
-};
-
-export default RouteProgramSheet;
+}

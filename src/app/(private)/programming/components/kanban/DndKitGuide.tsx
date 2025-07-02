@@ -25,8 +25,8 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { useApiContext } from "@/context/ApiContext";
-import NewRouteProgramSheet from "../NewRouteProgramSheet";
-import RouteProgramSheet from "../RouteProgramSheet";
+import { NewRouteProgramSheet } from "../NewRouteProgramSheet";
+import { RouteProgramSheet } from "../RouteProgramSheet";
 import Board from "./board";
 import Task from "./task";
 import TaskHeader from "./task-header";

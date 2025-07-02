@@ -31,7 +31,7 @@ export function MaterialHeader() {
         Importância de fazer o Cadastramento do Layout
       </span>
       <div className="flex flex-col gap-4">
-        <Card>
+        <Card className="shadow-none">
           <span>Etapas do Cadastramento</span>
           <Stepper current={1} gap direction="horizontal">
             {steps?.map((label, index) => (

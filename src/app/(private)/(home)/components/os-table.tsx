@@ -32,7 +32,7 @@ export function OsTable() {
     <>
       <div className="flex w-full flex-col gap-4 rounded-md shadow-sm xl:col-span-7 xl:h-[700px]">
         <div className="flex w-full flex-col items-center justify-between gap-2 p-4 lg:flex-row">
-          <span className="text-primary text-2xl font-bold">
+          <span className="text-primary text-xl font-bold 2xl:text-2xl">
             Ordens de Serviços - Rotas de Trabalho
           </span>
           <label

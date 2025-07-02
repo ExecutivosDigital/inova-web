@@ -42,7 +42,7 @@ export function EquipmentHeader() {
         Importância de fazer o Cadastramento do Equipamento
       </span>
       <div className="flex flex-col gap-4">
-        <Card>
+        <Card className="shadow-none">
           <span>Etapas do Cadastramento</span>
           <Stepper
             current={selectedEquipmentStep - 1}

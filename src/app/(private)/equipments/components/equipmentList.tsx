@@ -46,7 +46,7 @@ export function EquipmentList() {
       <Card className="h-full overflow-hidden">
         <CardHeader className="mb-0 flex-row items-center justify-between">
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <span className="text-primary text-2xl font-bold">
+            <span className="text-primary text-xl font-bold 2xl:text-2xl">
               Lista de Materiais
             </span>
             <label

@@ -46,9 +46,9 @@ const FormSchema = z.object({
     .string()
     .min(1, "Consumo é obrigatório")
     .min(2, "Consumo deve ter pelo menos 2 caracteres."),
-  date: z.string(),
-  status: z.string(),
-  place: z.string(),
+  date: z.string().min(1, "Data é obrigatória"),
+  status: z.string().min(1, "Status é obrigatório"),
+  place: z.string().min(1, "Local é obrigatório"),
 });
 
 interface EquipmentSheetProps {
@@ -111,7 +111,32 @@ export function EquipmentSheet({
   async function HandleEditEquipment() {
     const isValid = await validateStep(0);
     if (!isValid) {
-      return toast.error("Por favor, preencha todos os campos.");
+      const errors = form.formState.errors;
+
+      // Define field labels with proper typing
+      const fieldLabels: Record<keyof z.infer<typeof FormSchema>, string> = {
+        eqp: "Equipamento",
+        tag: "TAG",
+        service: "Serviço",
+        worker: "Responsável",
+        consumption: "Consumo",
+        date: "Data",
+        status: "Status",
+        place: "Local",
+      };
+
+      // Get first error with type safety
+      const firstErrorField = Object.keys(
+        errors,
+      )[0] as keyof typeof fieldLabels;
+      const firstError = errors[firstErrorField];
+
+      if (firstError?.message && firstErrorField in fieldLabels) {
+        const fieldLabel = fieldLabels[firstErrorField];
+        return toast.error(`${fieldLabel}: ${firstError.message}`);
+      }
+
+      return toast.error("Por favor, corrija os erros no formulário.");
     }
 
     setIsEditing(true);

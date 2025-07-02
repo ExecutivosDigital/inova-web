@@ -15,8 +15,8 @@ import { cn } from "@/lib/utils";
 import { planningList } from "@/mock/planning";
 import { Eye, Info, Plus } from "lucide-react";
 import { useState } from "react";
-import NewRouteProgramSheet from "./NewRouteProgramSheet";
-import RouteProgramSheet from "./RouteProgramSheet";
+import { NewRouteProgramSheet } from "./NewRouteProgramSheet";
+import { RouteProgramSheet } from "./RouteProgramSheet";
 
 export function ProgrammingTable() {
   const columns = [
@@ -41,7 +41,7 @@ export function ProgrammingTable() {
     <>
       <div className="flex w-full flex-col gap-4 rounded-md bg-white p-4 shadow-sm">
         <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-          <span className="text-primary text-2xl font-bold">
+          <span className="text-primary text-xl font-bold 2xl:text-2xl">
             Plano de Lubrificação
           </span>
           <div className="bg-primary/50 flex items-center gap-4 rounded-md px-2 py-1">

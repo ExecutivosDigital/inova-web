@@ -16,8 +16,8 @@ import { Plus } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import ExternalDraggingevent from "./dragging-events";
-import NewRoutePlanSheet from "./NewRoutePlanSheet";
-import RoutePlanSheet from "./RoutePlanSheet";
+import { NewRoutePlanSheet } from "./NewRoutePlanSheet";
+import { RoutePlanSheet } from "./RoutePlanSheet";
 
 interface CalendarEventProps {
   id: string;

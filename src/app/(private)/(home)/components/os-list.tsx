@@ -17,7 +17,7 @@ export function OsList() {
     <>
       <div className="w-full overflow-hidden rounded-md shadow-sm xl:col-span-5 xl:h-[700px]">
         <div className="flex w-full items-center justify-between p-2 xl:p-4">
-          <span className="text-primary text-sm font-semibold xl:text-xl">
+          <span className="text-primary text-sm font-semibold lg:text-xl 2xl:text-2xl">
             Ordens {selectedList}
           </span>
           <Image

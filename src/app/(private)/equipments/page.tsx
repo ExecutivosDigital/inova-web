@@ -5,7 +5,7 @@ export default function Equipments() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="text-default-800 text-primary text-2xl font-medium">
+        <div className="text-default-800 text-primary text-xl font-medium 2xl:text-2xl">
           Equipamentos
         </div>
       </div>

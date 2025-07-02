@@ -22,7 +22,7 @@ export function EquipmentSets() {
   return (
     <div className="flex w-full flex-col gap-4 p-4">
       <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-        <span className="text-primary text-2xl font-bold">
+        <span className="text-primary text-xl font-bold 2xl:text-2xl">
           Pontos do Equipamento
         </span>
         <label
@@ -48,7 +48,7 @@ export function EquipmentSets() {
             {equipmentSets.sets?.map((set) => (
               <div
                 key={`set + ${set.id}`}
-                className="flex cursor-pointer items-center gap-2 p-2"
+                className="group flex cursor-pointer items-center gap-2 p-2"
                 onClick={() => {
                   if (selectedSet === set) {
                     setSelectedSet(null);
@@ -63,8 +63,9 @@ export function EquipmentSets() {
               >
                 <div
                   className={cn(
-                    "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
-                    selectedSet?.id === set.id && "bg-primary text-white",
+                    "text-primary bg-primary/20 group-hover:bg-primary/30 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                    selectedSet?.id === set.id &&
+                      "bg-primary group-hover:bg-primary text-white",
                   )}
                 >
                   <span>1.1</span>
@@ -88,7 +89,7 @@ export function EquipmentSets() {
                 ?.subsets?.map((subset) => (
                   <div
                     key={`subset + ${subset.id}`}
-                    className="flex cursor-pointer items-center gap-2 p-2"
+                    className="group flex cursor-pointer items-center gap-2 p-2"
                     onClick={() => {
                       if (selectedSubset === subset) {
                         setSelectedSubset(null);
@@ -101,9 +102,9 @@ export function EquipmentSets() {
                   >
                     <div
                       className={cn(
-                        "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                        "text-primary bg-primary/20 group-hover:bg-primary/30 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
                         selectedSubset?.id === subset.id &&
-                          "bg-primary text-white",
+                          "bg-primary group-hover:bg-primary text-white",
                       )}
                     >
                       <span>1.1</span>
@@ -136,7 +137,7 @@ export function EquipmentSets() {
                 ?.cips?.map((cip) => (
                   <div
                     key={`cip + ${cip.id}`}
-                    className="flex items-center gap-2 p-2"
+                    className="group flex cursor-pointer items-center gap-2 p-2"
                     onClick={() => {
                       if (selectedCip === cip) {
                         setSelectedCip(null);
@@ -147,8 +148,9 @@ export function EquipmentSets() {
                   >
                     <div
                       className={cn(
-                        "text-primary bg-primary/20 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
-                        selectedCip?.id === cip.id && "bg-primary text-white",
+                        "text-primary bg-primary/20 group-hover:bg-primary/30 flex h-10 min-h-10 w-10 min-w-10 items-center justify-center rounded-md text-xs font-bold transition duration-200",
+                        selectedCip?.id === cip.id &&
+                          "bg-primary group-hover:bg-primary text-white",
                       )}
                     >
                       <span>1.1</span>

@@ -34,10 +34,10 @@ export default function MainMenu() {
                       "group data-[state=open]:text-primary-300 flex cursor-pointer items-center gap-2 px-6 py-2 2xl:py-4",
                       item.route === "/"
                         ? path === "/"
-                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"
+                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% font-semibold backdrop-blur backdrop-filter"
                           : "text-default-500"
                         : path.startsWith(item.route)
-                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% backdrop-blur backdrop-filter"
+                          ? "border-primary-500 from-primary/5 via-primary/30 to-primary/5 text-default-900 border-t-primary border-t-2 bg-gradient-to-r from-0% to-100% font-semibold backdrop-blur backdrop-filter"
                           : "text-default-500",
                     )}
                   >
@@ -47,6 +47,7 @@ export default function MainMenu() {
                         alt=""
                         width={20}
                         height={20}
+                        className="h-4 w-4 2xl:h-5 2xl:w-5"
                       />
                     ) : (
                       <Image
@@ -54,12 +55,11 @@ export default function MainMenu() {
                         alt=""
                         width={20}
                         height={20}
+                        className="h-4 w-4 2xl:h-5 2xl:w-5"
                       />
                     )}
                     {/* <item.icon className="h-5 w-5 " /> */}
-                    <span className="text-sm font-medium text-white">
-                      {item.title}
-                    </span>
+                    <span className="text-sm text-white">{item.title}</span>
                   </div>
                 </Link>
               </NavigationMenu.Trigger>

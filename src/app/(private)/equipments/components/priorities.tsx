@@ -47,12 +47,16 @@ export function Priorities() {
         <div className="flex h-40 w-full items-center justify-center bg-[url('/static/materials-header.png')] bg-cover bg-center bg-no-repeat">
           <div className="flex items-center gap-2 text-white">
             <LayersIcon />
-            <span className="text-2xl font-bold">EQUIPAMENTOS E DADOS</span>
+            <span className="text-xl font-bold 2xl:text-2xl">
+              EQUIPAMENTOS E DADOS
+            </span>
           </div>
         </div>
         <CardHeader className="mb-0 flex-row items-center justify-between">
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
-            <span className="text-primary text-2xl font-bold">Prioridades</span>
+            <span className="text-primary text-xl font-bold 2xl:text-2xl">
+              Prioridades
+            </span>
             <label
               htmlFor="search"
               className="group focus-within:border-primary active:border-primary flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5 transition duration-200"

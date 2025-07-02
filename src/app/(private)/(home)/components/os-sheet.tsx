@@ -86,7 +86,29 @@ export function OsSheet({ open, onClose, selectedOs }: OsSheetProps) {
   async function HandleEditOs() {
     const isValid = await validateStep(0);
     if (!isValid) {
-      return toast.error("Por favor, preencha todos os campos.");
+      const errors = form.formState.errors;
+
+      // Define field labels with proper typing
+      const fieldLabels: Record<keyof z.infer<typeof FormSchema>, string> = {
+        worker: "Responsável",
+        service: "Serviço",
+        os: "OS",
+        executed: "Data Executada",
+        spent: "Tempo de Conclusão",
+      };
+
+      // Get first error with type safety
+      const firstErrorField = Object.keys(
+        errors,
+      )[0] as keyof typeof fieldLabels;
+      const firstError = errors[firstErrorField];
+
+      if (firstError?.message && firstErrorField in fieldLabels) {
+        const fieldLabel = fieldLabels[firstErrorField];
+        return toast.error(`${fieldLabel}: ${firstError.message}`);
+      }
+
+      return toast.error("Por favor, corrija os erros no formulário.");
     }
 
     setIsEditing(true);

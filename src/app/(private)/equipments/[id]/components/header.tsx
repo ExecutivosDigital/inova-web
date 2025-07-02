@@ -16,7 +16,9 @@ export function Header({ selectedEquipment }: HeaderProps) {
       <div className="flex h-40 w-full items-center justify-center bg-[url('/static/materials-header.png')] bg-cover bg-center bg-no-repeat">
         <div className="flex items-center gap-2 text-white">
           <LayersIcon />
-          <span className="text-2xl font-bold">EQUIPAMENTOS E DADOS</span>
+          <span className="text-xl font-bold 2xl:text-2xl">
+            EQUIPAMENTOS E DADOS
+          </span>
         </div>
       </div>
       <div className="flex w-full items-center justify-between p-2 xl:p-4">

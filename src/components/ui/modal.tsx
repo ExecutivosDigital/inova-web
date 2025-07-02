@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "./scroll-area";
 
 interface ModalProps {
   className?: string;
@@ -21,11 +22,11 @@ export function Modal({ className, children, isOpen, close }: ModalProps) {
       />
       <div
         className={cn(
-          "border-primary z-[1000] h-auto w-[90%] max-w-[700px] rounded-xl border bg-white shadow-md",
+          "border-primary z-[1000] h-[90vh] w-[90%] max-w-[700px] rounded-xl border bg-white shadow-md",
           className,
         )}
       >
-        {children}
+        <ScrollArea className="h-full w-full">{children}</ScrollArea>
       </div>
     </div>
   );

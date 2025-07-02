@@ -8,7 +8,7 @@ export function Kpis() {
   return (
     <div className="flex w-full flex-col gap-4 p-4">
       <div className="flex w-full items-center justify-between">
-        <span className="text-primary text-2xl font-semibold">
+        <span className="text-primary text-xl font-semibold 2xl:text-2xl">
           Indicadores do Equipamento
         </span>
         <DatePicker

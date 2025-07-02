@@ -1,11 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
@@ -13,141 +22,128 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { ChangeEventHandler, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-
-import { Calendar } from "@/components/ui/calendar";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setHours, setMinutes } from "date-fns";
 import { CalendarIcon, Loader2 } from "lucide-react";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { useForm, UseFormReturn } from "react-hook-form";
+import toast from "react-hot-toast";
 import CreatableSelect from "react-select/creatable";
 import { z } from "zod";
 
-interface NewRoutePlanSheetProps {
-  name: string;
-  description?: string;
-  attendees: string[];
-}
-
-const schema = z.object({
-  title: z.string(),
-  description: z.string().optional(),
-  attendees: z.array(z.string()),
-  startDate: z.date(),
-  endDate: z.date(),
+const optionsSchema = z.object({
+  label: z.string(),
+  value: z.string(),
 });
 
-const NewRoutePlanSheet = ({
-  open,
-  onClose,
-  selectedDate,
-}: {
+const FormSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Responsável é obrigatório")
+    .min(2, "Responsável deve ter pelo menos 2 caracteres."),
+  description: z.string().optional(),
+  attendees: z
+    .array(optionsSchema)
+    .min(1, { message: "Selecione pelo menos um participante" }),
+  date: z.date(),
+});
+
+interface NewRoutePlanSheetProps {
   open: boolean;
   onClose: () => void;
   selectedDate?: Date | null;
-}) => {
-  const [newEventData, setNewEventData] = useState<NewRoutePlanSheetProps>({
-    name: "",
-    description: "",
-    attendees: [],
-  });
-  const [selectedStart, setSelectedStart] = useState<Date | undefined>(
-    selectedDate || new Date(),
-  );
-  const [timeValueStart, setTimeValueStart] = useState<string>(
-    selectedDate
-      ? selectedDate.toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      : "12:00",
-  );
+}
 
-  const [selectedEnd, setSelectedEnd] = useState<Date | undefined>(
-    selectedDate
-      ? new Date(selectedDate.getTime() + 60 * 60 * 1000)
-      : new Date(new Date().getTime() + 60 * 60 * 1000),
-  );
-  const [timeValueEnd, setTimeValueEnd] = useState<string>(
-    selectedDate
-      ? new Date(selectedDate.getTime() + 60 * 60 * 1000).toLocaleTimeString(
-          "pt-BR",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          },
-        )
-      : "13:00",
-  );
-  const [isCreating] = useState(false);
-  const [isStartTimePopoverOpen, setIsStartTimePopoverOpen] = useState(false);
-  const [isEndTimePopoverOpen, setIsEndTimePopoverOpen] = useState(false);
+export function NewRoutePlanSheet({
+  open,
+  onClose,
+  selectedDate,
+}: NewRoutePlanSheetProps) {
+  const [isCreating, setIsCreating] = useState(false);
 
-  const { control } = useForm({
-    resolver: zodResolver(schema),
-    mode: "all",
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    mode: "onChange",
+    defaultValues: {
+      title: "",
+      description: "",
+      attendees: [],
+      date: selectedDate || new Date(),
+    },
   });
 
-  const handleTimeChangeStart: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!selectedStart) {
-      setTimeValueStart(time);
-      return;
-    }
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selectedStart, minutes), hours);
-    setSelectedStart(newSelectedDate);
-    setTimeValueStart(time);
+  const useFormSteps = (form: UseFormReturn<z.infer<typeof FormSchema>>) => {
+    const [activeStep, setActiveStep] = useState(0);
+
+    const stepFields = {
+      0: ["title", "description", "attendees", "date"] as const,
+    };
+
+    const validateStep = async (step: number) => {
+      const fields = stepFields[step as keyof typeof stepFields];
+      if (!fields) return true;
+      return await form.trigger(fields);
+    };
+
+    return { activeStep, validateStep, setActiveStep };
   };
 
-  const handleDaySelectStart = (date: Date | undefined) => {
-    if (!timeValueStart || !date) {
-      setSelectedStart(date);
-      return;
-    }
-    const [hours, minutes] = timeValueStart
-      .split(":")
-      .map((str) => parseInt(str, 10));
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes,
-    );
-    setSelectedStart(newDate);
-  };
+  const { validateStep } = useFormSteps(form);
 
-  const handleTimeChangeEnd: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const time = e.target.value;
-    if (!selectedEnd) {
-      setTimeValueEnd(time);
-      return;
-    }
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selectedEnd, minutes), hours);
-    setSelectedEnd(newSelectedDate);
-    setTimeValueEnd(time);
-  };
+  async function HandleCreateEquipment() {
+    const isValid = await validateStep(0);
 
-  const handleDaySelectEnd = (date: Date | undefined) => {
-    if (!timeValueEnd || !date) {
-      setSelectedEnd(date);
-      return;
+    if (!isValid) {
+      const errors = form.formState.errors;
+
+      // Define field labels with proper typing
+      const fieldLabels: Record<keyof z.infer<typeof FormSchema>, string> = {
+        title: "Título",
+        description: "Descrição",
+        attendees: "Participantes",
+        date: "Data",
+      };
+
+      // Get first error with type safety
+      const firstErrorField = Object.keys(
+        errors,
+      )[0] as keyof typeof fieldLabels;
+      const firstError = errors[firstErrorField];
+
+      if (firstError?.message && firstErrorField in fieldLabels) {
+        const fieldLabel = fieldLabels[firstErrorField];
+        return toast.error(`${fieldLabel}: ${firstError.message}`);
+      }
+
+      return toast.error("Por favor, corrija os erros no formulário.");
     }
-    const [hours, minutes] = timeValueEnd
-      .split(":")
-      .map((str) => parseInt(str, 10));
-    const newDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      hours,
-      minutes,
-    );
-    setSelectedEnd(newDate);
-  };
+
+    setIsCreating(true);
+    toast.success("Planejamento criado com sucesso!");
+    return setIsCreating(false);
+  }
+
+  useEffect(() => {
+    if (selectedDate && open) {
+      form.reset({
+        title: "",
+        description: "",
+        attendees: [],
+        date: selectedDate,
+      });
+    }
+  }, [selectedDate, open, form]);
+
+  useEffect(() => {
+    if (!open) {
+      form.reset({
+        title: "",
+        description: "",
+        attendees: [],
+        date: selectedDate || new Date(),
+      });
+    }
+  }, [open, form]);
 
   return (
     <>
@@ -162,207 +158,144 @@ const NewRoutePlanSheet = ({
               <SheetTitle>Novo Planejamento de Rota</SheetTitle>
             </SheetHeader>
             <div className="mt-6 h-full">
-              <form className="flex h-full flex-col">
-                <div className="space-y-4 px-6 pb-5">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="title">
-                      Lorem lipsum <span className="font-bold">*</span>
-                    </Label>
-                    <Input
-                      id="title"
-                      type="text"
-                      placeholder="Lorem lipsum"
-                      value={newEventData?.name}
-                      onChange={(e) =>
-                        setNewEventData({
-                          ...newEventData,
-                          name: e.target.value,
-                        })
-                      }
-                      required
-                    />
-                  </div>
+              <Form {...form}>
+                <div className="h-[calc(100vh-200px)]">
+                  <ScrollArea className="h-full">
+                    <div className="space-y-4 px-6 pb-5">
+                      <FormField
+                        key="title"
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Título</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Título"
+                                {...field}
+                                disabled={isCreating}
+                                className={cn("", {
+                                  "border-destructive focus:border-destructive text-text-100 rounded-md":
+                                    form.formState.errors.title,
+                                })}
+                                autoComplete="off"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
+                        )}
+                      />
 
-                  <div className="space-y-1.5">
-                    <Label htmlFor="description">Lorem lipsum</Label>
-                    <Input
-                      id="description"
-                      type="text"
-                      placeholder="Lorem lipsum"
-                      value={newEventData?.description}
-                      onChange={(e) =>
-                        setNewEventData({
-                          ...newEventData,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                      <FormField
+                        key="description"
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Descrição</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Descrição"
+                                {...field}
+                                disabled={isCreating}
+                                className={cn("", {
+                                  "border-destructive focus:border-destructive text-text-100 rounded-md":
+                                    form.formState.errors.description,
+                                })}
+                                autoComplete="off"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
+                        )}
+                      />
 
-                  <div>
-                    <Label htmlFor="startDate" className="mb-1.5">
-                      Lorem lipsum <span className="font-bold">*</span>
-                    </Label>
-                    <Popover
-                      open={isStartTimePopoverOpen}
-                      onOpenChange={setIsStartTimePopoverOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="border-default-200 text-default-600 w-full justify-between text-left font-normal"
-                        >
-                          Lorem lipsum
-                          {/* {selectedStart
-                            ? new Date(selectedStart).toLocaleDateString(
-                                "pt-BR",
-                                {
-                                  month: "numeric",
-                                  day: "numeric",
-                                },
-                              )
-                            : ""}
-                          {""} - {timeValueStart}h */}
-                          <CalendarIcon className="h-4 w-4" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        side="left"
-                        className="z-[99999] w-auto p-0"
-                      >
-                        <Controller
-                          name="startDate"
-                          control={control}
-                          render={({}) => (
-                            <Calendar
-                              mode="single"
-                              selected={selectedStart}
-                              onSelect={(e) => {
-                                handleDaySelectStart(e);
-                                setIsStartTimePopoverOpen(false);
-                              }}
-                            />
-                          )}
-                        />
-                        <div className="bg-primary/10 flex w-full items-center justify-between p-2 font-semibold">
-                          <span>Hora: </span>
-                          <input
-                            type="time"
-                            value={timeValueStart}
-                            onChange={handleTimeChangeStart}
-                            step="60"
-                            className="focus:border-primary focus:outline-primary focus:ring-primary bg-transparent"
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
+                      <FormField
+                        control={form.control}
+                        name="date"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data e Hora de Início *</FormLabel>
+                            <div className="flex gap-2">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <FormControl>
+                                    <div className="flex h-9 w-full items-center justify-between rounded-lg border border-zinc-400 px-2">
+                                      {field.value
+                                        ? moment(
+                                            field.value,
+                                            "dd/MM/yyyy",
+                                          ).format("DD/MM/YYYY")
+                                        : "Selecione a data"}
+                                      <CalendarIcon className="h-4 w-4" />
+                                    </div>
+                                  </FormControl>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange} // Directly controlled by form
+                                    disabled={(date) => date < new Date()}
+                                  />
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
 
-                  <div>
-                    <Label htmlFor="endDate" className="mb-1.5">
-                      Lorem lipsum <span className="font-bold">*</span>
-                    </Label>
-                    <Popover
-                      open={isEndTimePopoverOpen}
-                      onOpenChange={setIsEndTimePopoverOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-full justify-between border-black text-left font-normal text-black",
-                            // !event.start && "text-muted-foreground",
-                          )}
-                        >
-                          Lorem lipsum
-                          {/* {selectedEnd
-                            ? new Date(selectedEnd).toLocaleDateString(
-                                "pt-BR",
-                                {
-                                  month: "numeric",
-                                  day: "numeric",
-                                },
-                              )
-                            : ""}
-                          {""} - {timeValueEnd}h */}
-                          <CalendarIcon className="h-4 w-4" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        side="left"
-                        className="z-[99999] w-auto p-0"
-                      >
-                        <Controller
-                          name="endDate"
-                          control={control}
-                          render={({}) => (
-                            <Calendar
-                              mode="single"
-                              selected={selectedEnd}
-                              onSelect={(e) => {
-                                handleDaySelectEnd(e);
-                                setIsEndTimePopoverOpen(false);
-                              }}
-                            />
-                          )}
-                        />
-                        <div className="bg-primary/10 flex w-full items-center justify-between p-2 font-semibold">
-                          <span>Hora: </span>
-                          <input
-                            type="time"
-                            value={timeValueEnd}
-                            onChange={handleTimeChangeEnd}
-                            step="60"
-                            className="focus:border-primary focus:outline-primary focus:ring-primary bg-transparent"
-                          />
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="endDate" className="mb-1.5">
-                      Lorem lipsum
-                    </Label>
-                    <CreatableSelect
-                      components={{
-                        DropdownIndicator: null,
-                      }}
-                      className="w-full"
-                      isMulti
-                      placeholder="Lorem lipsum"
-                      onChange={(e) =>
-                        setNewEventData({
-                          ...newEventData,
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          attendees: e.map((event: any) => event.value),
-                        })
-                      }
-                      noOptionsMessage={() => "Lorem lipsum"}
-                    />
-                  </div>
+                      <FormField
+                        control={form.control}
+                        name="attendees"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Participantes</FormLabel>
+                            <FormControl>
+                              <CreatableSelect
+                                {...field}
+                                isMulti
+                                placeholder="Selecione participantes"
+                                onCreateOption={(inputValue) => {
+                                  const newOption = {
+                                    label: inputValue,
+                                    value: inputValue
+                                      .toLowerCase()
+                                      .replace(/\s+/g, "."),
+                                  };
+                                  field.onChange([...field.value, newOption]);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage className="text-rose-500" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </ScrollArea>
                 </div>
-                <Button
-                  type="submit"
-                  disabled={isCreating}
-                  className="mx-auto w-max text-white"
-                >
-                  {isCreating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Salvando...
-                    </>
-                  ) : (
-                    "Salvar Planejamento de Rota"
-                  )}
-                </Button>
-              </form>
+                <div className="flex flex-wrap gap-2 px-6 pb-12">
+                  <Button
+                    type="button"
+                    disabled={isCreating}
+                    onClick={HandleCreateEquipment}
+                    className="flex-1"
+                  >
+                    {isCreating ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Salvando...
+                      </>
+                    ) : (
+                      "Salvar Planejamento de Rota"
+                    )}
+                  </Button>
+                </div>{" "}
+              </Form>
             </div>
           </ScrollArea>
         </SheetContent>
       </Sheet>
     </>
   );
-};
-
-export default NewRoutePlanSheet;
+}

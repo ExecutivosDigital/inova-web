@@ -6,6 +6,7 @@ export interface EquipmentsProps {
   last: string;
   programmed: string;
   executed: string;
+  priority?: boolean;
 }
 
 export interface EquipmentCipsProps {

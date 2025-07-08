@@ -78,23 +78,23 @@ const OsTable = () => {
                 onClick={() => setOpenEquipmentOsSheet(true)}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap" />
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap" />
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {eq.eqp}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {eq.service}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {eq.worker}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {eq.consumption}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {eq.date}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   <Info
                     className={cn(
                       "mx-auto",
@@ -104,7 +104,7 @@ const OsTable = () => {
                     )}
                   />
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-bold whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-bold whitespace-nowrap">
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       <div className="bg-primary/20 text-primary mx-auto flex h-10 w-10 items-center justify-center rounded-md p-1 text-center">

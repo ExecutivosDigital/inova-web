@@ -18,6 +18,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { CustomPagination } from "@/components/ui/custom-pagination";
+import { cn } from "@/lib/utils";
 import { equipments } from "@/mock/equipments";
 import { Eye, Plus, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -47,7 +48,7 @@ export function EquipmentList() {
         <CardHeader className="mb-0 flex-row items-center justify-between">
           <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row">
             <span className="text-primary text-xl font-bold 2xl:text-2xl">
-              Lista de Materiais
+              Lista de Equipamentos
             </span>
             <label
               htmlFor="search"
@@ -90,26 +91,56 @@ export function EquipmentList() {
                   onClick={() => router.push(`/equipments/${equipment.id}`)}
                   className="hover:bg-primary/10 cursor-pointer text-center transition duration-200"
                 >
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.name}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.tag}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.consumption}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.last}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.programmed}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell
+                    className={cn(
+                      "py-1.5 text-sm whitespace-nowrap",
+                      equipment.priority && "text-primary font-semibold",
+                    )}
+                  >
                     {equipment.executed}
                   </TableCell>
-                  <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
-                    <div className="bg-primary mx-auto w-max rounded-md p-1">
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
+                    <div className="bg-primary mx-auto flex h-8 w-8 items-center justify-center rounded-md p-1.5">
                       <Eye />
                     </div>
                   </TableCell>

@@ -18,10 +18,12 @@ import { cn } from "@/lib/utils";
 import { dashboardEquipments } from "@/mock/dashboard";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import { Info, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EquipmentSheet } from "./equipment-sheet";
 
 export function OsEquipments() {
+  const router = useRouter();
   const columns = [
     { key: "os", label: "" },
     { key: "eqp", label: "Equipamento" },
@@ -36,8 +38,7 @@ export function OsEquipments() {
   const [osPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [openEquipmentSheet, setOpenEquipmentSheet] = useState<boolean>(false);
-  const [selectedEquipment, setSelectedEquipment] =
-    useState<DashboardEquipmentProps | null>(null);
+  const [selectedEquipment] = useState<DashboardEquipmentProps | null>(null);
 
   return (
     <>
@@ -76,31 +77,30 @@ export function OsEquipments() {
               <TableRow
                 key={equipment.id}
                 onClick={() => {
-                  setSelectedEquipment(equipment);
-                  setOpenEquipmentSheet(true);
+                  router.push(`/equipments/${equipment.id}`);
                 }}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap" />
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap" />
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.eqp}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.tag}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.service}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.worker}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.consumption}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.date}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   <Info
                     className={cn(
                       "mx-auto",
@@ -110,7 +110,7 @@ export function OsEquipments() {
                     )}
                   />
                 </TableCell>
-                <TableCell className="flex items-center justify-center py-0.5 text-sm font-bold whitespace-nowrap">
+                <TableCell className="flex items-center justify-center py-1.5 text-sm font-bold whitespace-nowrap">
                   <DropdownMenu>
                     <DropdownMenuTrigger>
                       <div className="bg-primary/20 text-primary flex h-10 w-10 items-center justify-center rounded-md p-1 text-center">

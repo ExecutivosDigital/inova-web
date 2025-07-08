@@ -41,16 +41,27 @@ export function OsList() {
               >
                 <div className="flex items-center gap-2">
                   <div className="bg-primary/20 h-10 min-h-10 w-10 min-w-10 rounded-md" />
-                  <div className="flex flex-col text-xs xl:text-sm">
-                    <span>Lorem Ipsum is simply dummy text</span>
-                    <span>{new Date().toLocaleDateString("pt-BR")}</span>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-semibold xl:text-sm">
+                      {os.service}
+                    </span>
+                    <span className="text-xs text-zinc-500 xl:text-sm">
+                      {new Date().toLocaleDateString("pt-BR")}
+                    </span>
                   </div>
                 </div>
-                <div className="flex w-max items-center gap-1 text-zinc-500">
-                  <span className="w-max text-xs font-semibold transition duration-200 group-hover:underline xl:text-sm">
-                    Acesse Aqui
-                  </span>
-                  <ChevronRight className="w-4" />
+                <div className="flex flex-col items-center">
+                  <div className="flex w-max items-center gap-1 text-zinc-500">
+                    <span className="w-max text-xs font-semibold transition duration-200 group-hover:underline xl:text-sm">
+                      Acesse Aqui
+                    </span>
+                    <ChevronRight className="w-4" />
+                  </div>
+                  {os.status === "delayed" && (
+                    <span className="text-primary text-xs font-semibold">
+                      OS fin. com atraso
+                    </span>
+                  )}
                 </div>
               </div>
             ))}

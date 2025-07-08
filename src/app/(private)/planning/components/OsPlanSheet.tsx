@@ -48,17 +48,13 @@ const FormSchema = z.object({
   date: z.date(),
 });
 
-interface RoutePlanSheetProps {
+interface OsPlanSheetProps {
   open: boolean;
   onClose: () => void;
   selectedDate?: Date | null;
 }
 
-export function RoutePlanSheet({
-  open,
-  onClose,
-  selectedDate,
-}: RoutePlanSheetProps) {
+export function OsPlanSheet({ open, onClose, selectedDate }: OsPlanSheetProps) {
   const [isCreating, setIsCreating] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -155,7 +151,7 @@ export function RoutePlanSheet({
         >
           <ScrollArea className="h-full">
             <SheetHeader className="px-6">
-              <SheetTitle>Novo Planejamento de Rota</SheetTitle>
+              <SheetTitle>Planejamento de OS</SheetTitle>
             </SheetHeader>
             <div className="mt-6 h-full">
               <Form {...form}>
@@ -287,7 +283,7 @@ export function RoutePlanSheet({
                         Salvando...
                       </>
                     ) : (
-                      "Salvar Planejamento de Rota"
+                      "Salvar Planejamento de OS"
                     )}
                   </Button>
                 </div>{" "}

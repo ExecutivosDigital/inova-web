@@ -18,8 +18,9 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { CustomPagination } from "@/components/ui/custom-pagination";
-import { equipments } from "@/mock/equipments";
-import { Eye, LayersIcon, Plus, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { equipmentPriorities } from "@/mock/equipments";
+import { Eye, Filter, LayersIcon, Plus, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NewEquipmentModal } from "./NewEquipmentModal";
@@ -84,40 +85,45 @@ export function Priorities() {
                 {columns.map((column) => (
                   <TableHead
                     key={column.key}
-                    className="h-12 flex-row text-end text-sm font-semibold text-white uppercase last:text-start"
+                    className={cn(
+                      "h-12 flex-row text-end text-sm font-semibold text-white uppercase last:text-start",
+                    )}
                   >
-                    <p className="text-center">{column.label}</p>
+                    <div className="flex w-max cursor-pointer items-center gap-2">
+                      <p className="text-center">{column.label}</p>
+                      {column.key === "programmed" && <Filter />}
+                    </div>
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {equipments.map((equipment) => (
+              {equipmentPriorities.map((equipment) => (
                 <TableRow
                   key={equipment.id}
                   onClick={() => router.push(`/equipments/${equipment.id}`)}
                   className="hover:bg-primary/10 cursor-pointer text-center transition duration-200"
                 >
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {equipment.name}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {equipment.tag}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {equipment.consumption}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary cursor-pointer py-1.5 text-sm font-medium whitespace-nowrap underline">
                     {equipment.last}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary cursor-pointer py-1.5 text-sm font-medium whitespace-nowrap underline">
                     {equipment.programmed}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {equipment.executed}
                   </TableCell>
-                  <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
-                    <div className="bg-primary mx-auto w-max rounded-md p-1">
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
+                    <div className="bg-primary mx-auto flex h-8 w-8 items-center justify-center rounded-md p-1.5">
                       <Eye />
                     </div>
                   </TableCell>

@@ -100,7 +100,7 @@ const TableWithCards = () => {
                   onClick={() => router.push(`/materials/${material.id}`)}
                   className="hover:bg-primary/10 cursor-pointer text-center transition duration-200"
                 >
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {material.name}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
@@ -109,13 +109,13 @@ const TableWithCards = () => {
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
                     {material.type}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {material.maker}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
                     {material.volume}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     {material.amount}
                   </TableCell>
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
@@ -124,7 +124,7 @@ const TableWithCards = () => {
                   <TableCell className="text-primary py-.5 text-sm font-medium whitespace-nowrap">
                     {material.minimum}
                   </TableCell>
-                  <TableCell className="text-primary py-0.5 text-sm font-medium whitespace-nowrap">
+                  <TableCell className="text-primary py-1.5 text-sm font-medium whitespace-nowrap">
                     <div
                       className={cn(
                         "mx-auto w-max rounded-md border px-2 py-1",
@@ -136,8 +136,8 @@ const TableWithCards = () => {
                       {material.status}
                     </div>
                   </TableCell>
-                  <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
-                    <div className="bg-primary mx-auto w-max rounded-md p-1">
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
+                    <div className="bg-primary mx-auto flex h-8 w-8 items-center justify-center rounded-md p-1.5">
                       <Eye />
                     </div>
                   </TableCell>

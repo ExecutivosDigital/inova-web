@@ -4,12 +4,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import EquipmentMediaSheet from "./EquipmentMediaSheet";
+import EquipmentMediaModal from "./EquipmentMediaModal";
 
 export function Gallery() {
   const [equipmentPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openEquipmentMediaSheet, setOpenEquipmentMediaSheet] =
+  const [openEquipmentMediaModal, setOpenEquipmentMediaModal] =
     useState<boolean>(false);
 
   return (
@@ -32,7 +32,7 @@ export function Gallery() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
-                onClick={() => setOpenEquipmentMediaSheet(true)}
+                onClick={() => setOpenEquipmentMediaModal(true)}
                 className="hover:bg-primary/20 group flex w-full cursor-pointer items-center justify-between border-b px-2 py-1 transition duration-200 xl:px-4 xl:py-2"
               >
                 <div className="flex items-center gap-2">
@@ -60,10 +60,10 @@ export function Gallery() {
           </div>
         </div>
       </div>
-      {openEquipmentMediaSheet && (
-        <EquipmentMediaSheet
-          open={openEquipmentMediaSheet}
-          onClose={() => setOpenEquipmentMediaSheet(false)}
+      {openEquipmentMediaModal && (
+        <EquipmentMediaModal
+          open={openEquipmentMediaModal}
+          onClose={() => setOpenEquipmentMediaModal(false)}
         />
       )}
     </>

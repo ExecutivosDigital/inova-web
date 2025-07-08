@@ -1,4 +1,5 @@
 "use client";
+import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
   Table,
   TableBody,
@@ -7,33 +8,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-// avatar
-
-import { CustomPagination } from "@/components/ui/custom-pagination";
-import { cn } from "@/lib/utils";
 import { planningList } from "@/mock/planning";
-import { Eye, Info, Plus } from "lucide-react";
+import { Eye, Plus, Search } from "lucide-react";
 import { useState } from "react";
-import { NewRoutePlanSheet } from "./NewRoutePlanSheet";
-import { RoutePlanSheet } from "./RoutePlanSheet";
+import { NewOsPlanSheet } from "./NewOsPlanSheet";
+import { OsPlanSheet } from "./OsPlanSheet";
 
 export function PlanningTable() {
   const columns = [
-    { key: "os", label: "Rota" },
-    { key: "amount", label: "QNT. OS" },
-    { key: "startDate", label: "Data Inicial" },
-    { key: "worker", label: "Responsável" },
-    { key: "eqp", label: "Equipamento" },
-    { key: "status", label: "Status" },
+    { key: "id", label: "ID" },
+    { key: "area", label: "ÁREA" },
+    { key: "service", label: "SERVIÇO" },
+    { key: "eqp", label: "EQUIPAMENTO" },
+    { key: "worker", label: "RESPONSÁVEL" },
+    { key: "startDate", label: "Data INICIAL" },
+    { key: "endDate", label: "DATA TÉRMINO" },
     { key: "action", label: "" },
   ];
 
   const [planningPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedFilter, setSelectedFilter] = useState("Todos");
-  const [newRoutePlanSheetOpen, setNewRoutePlanSheetOpen] = useState(false);
-  const [openRoutePlanSheet, setOpenRoutePlanSheet] = useState<boolean>(false);
+  const [newRouteOsSheetOpen, setNewRouteOsSheetOpen] = useState(false);
+  const [openOsPlanSheet, setOpenOsPlanSheet] = useState<boolean>(false);
 
   return (
     <>
@@ -42,41 +38,23 @@ export function PlanningTable() {
           <span className="text-primary text-xl font-bold 2xl:text-2xl">
             Plano de Lubrificação
           </span>
-          <div className="bg-primary/50 flex items-center gap-4 rounded-md px-2 py-1">
-            <div
-              onClick={() => setSelectedFilter("Todos")}
-              className={cn(
-                "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                selectedFilter === "Todos" && "bg-primary",
-              )}
-            >
-              Todos
-            </div>
-            <div
-              onClick={() => setSelectedFilter("Normal")}
-              className={cn(
-                "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                selectedFilter === "Normal" && "bg-primary",
-              )}
-            >
-              Normal
-            </div>
-            <div
-              onClick={() => setSelectedFilter("Baixo")}
-              className={cn(
-                "h-full w-max cursor-pointer rounded-md px-2 py-1 text-xs font-semibold text-white transition duration-200",
-                selectedFilter === "Baixo" && "bg-primary",
-              )}
-            >
-              Baixo
-            </div>
-          </div>
+          <label
+            htmlFor="search"
+            className="group focus-within:border-primary active:border-primary flex h-10 w-[300px] flex-row items-center gap-1 rounded-lg border border-zinc-400 p-0.5 transition duration-200"
+          >
+            <Search className="group-focus-within:text-primary h-4 w-4 text-zinc-400 transition duration-200" />
+            <input
+              id="search"
+              className="flex-w group-focus-within:placeholder:text-primary/20 group-focus-within:text-primary h-full w-full bg-transparent text-zinc-400 transition duration-200 outline-none placeholder:text-zinc-400"
+              placeholder="Pesquisar"
+            />
+          </label>
           <button
-            onClick={() => setNewRoutePlanSheetOpen(true)}
+            onClick={() => setNewRouteOsSheetOpen(true)}
             className="bg-primary hover:bg-primary-dark flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 font-semibold text-white transition duration-200"
           >
             <Plus />
-            <span>Novo Planejamento de Rota</span>
+            <span>Planejamento de OS</span>
           </button>
         </div>
         <Table>
@@ -96,35 +74,32 @@ export function PlanningTable() {
             {planningList.map((plan) => (
               <TableRow
                 key={plan.id}
-                onClick={() => setOpenRoutePlanSheet(true)}
+                onClick={() => setOpenOsPlanSheet(true)}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.os}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.id}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.amount}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.area}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.startDate}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.service}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.worker}
-                </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.eqp}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  <Info
-                    className={cn(
-                      "mx-auto",
-                      plan.status === "finished"
-                        ? "text-green-500"
-                        : "text-amber-500",
-                    )}
-                  />
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.worker}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.startDate}
+                </TableCell>
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.endDate}
+                </TableCell>
+
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
                   <div className="bg-primary hover:bg-primary-dark mx-auto w-max cursor-pointer rounded-md p-1 transition duration-200">
                     <Eye />
                   </div>
@@ -139,16 +114,16 @@ export function PlanningTable() {
           pages={planningPages}
         />
       </div>
-      {newRoutePlanSheetOpen && (
-        <NewRoutePlanSheet
-          open={newRoutePlanSheetOpen}
-          onClose={() => setNewRoutePlanSheetOpen(false)}
+      {newRouteOsSheetOpen && (
+        <NewOsPlanSheet
+          open={newRouteOsSheetOpen}
+          onClose={() => setNewRouteOsSheetOpen(false)}
         />
       )}
-      {openRoutePlanSheet && (
-        <RoutePlanSheet
-          open={openRoutePlanSheet}
-          onClose={() => setOpenRoutePlanSheet(false)}
+      {openOsPlanSheet && (
+        <OsPlanSheet
+          open={openOsPlanSheet}
+          onClose={() => setOpenOsPlanSheet(false)}
         />
       )}
     </>

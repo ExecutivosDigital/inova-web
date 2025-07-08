@@ -27,6 +27,7 @@ export function OsTable() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedOs, setSelectedOs] = useState<DashboardOsProps | null>(null);
   const [openOsSheet, setOpenOsSheet] = useState<boolean>(false);
+  const [query, setQuery] = useState<string>("");
 
   return (
     <>
@@ -43,7 +44,9 @@ export function OsTable() {
             <input
               id="search"
               className="flex-w group-focus-within:placeholder:text-primary/20 group-focus-within:text-primary h-full w-full bg-transparent text-zinc-400 transition duration-200 outline-none placeholder:text-zinc-400"
-              placeholder="Procurar"
+              placeholder="Pesquisar por Responsável"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </label>
         </div>
@@ -61,40 +64,44 @@ export function OsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dashboardOs.map((os) => (
-              <TableRow
-                key={os.id}
-                onClick={() => {
-                  setSelectedOs(os);
-                  setOpenOsSheet(true);
-                }}
-                className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
-              >
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {os.worker}
-                </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {os.service}
-                </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {os.os}
-                </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {os.executed}
-                </TableCell>
-                <TableCell className="m-auto flex h-full w-max items-center gap-1 py-2 text-sm font-medium whitespace-nowrap">
-                  {os.spent}
-                  <Info
-                    className={cn(
-                      "mx-auto",
-                      os.status === "finished"
-                        ? "text-green-500"
-                        : "text-amber-500",
-                    )}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            {dashboardOs
+              .filter((os) =>
+                os.worker.toLowerCase().includes(query.toLowerCase()),
+              )
+              .map((os) => (
+                <TableRow
+                  key={os.id}
+                  onClick={() => {
+                    setSelectedOs(os);
+                    setOpenOsSheet(true);
+                  }}
+                  className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
+                >
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                    {os.worker}
+                  </TableCell>
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                    {os.service}
+                  </TableCell>
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                    {os.os}
+                  </TableCell>
+                  <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                    {os.executed}
+                  </TableCell>
+                  <TableCell className="m-auto flex h-full w-max items-center gap-2 py-2 text-sm font-medium whitespace-nowrap">
+                    {os.spent}
+                    <Info
+                      className={cn(
+                        "mx-auto",
+                        os.status === "finished"
+                          ? "text-green-500"
+                          : "text-amber-500",
+                      )}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
         <div className="flex h-16 w-full items-center justify-center">

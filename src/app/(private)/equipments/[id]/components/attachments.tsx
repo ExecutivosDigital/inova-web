@@ -4,12 +4,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import EquipmentAttachmentSheet from "./EquipmentAttachmentSheet";
+import EquipmentAttachmentModal from "./EquipmentAttachmentModal";
 
 export function Attachments() {
   const [equipmentPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openEquipmentAttachmentSheet, setOpenEquipmentAttachmentSheet] =
+  const [openEquipmentAttachmentModal, setOpenEquipmentAttachmentModal] =
     useState<boolean>(false);
 
   return (
@@ -32,7 +32,7 @@ export function Attachments() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
-                onClick={() => setOpenEquipmentAttachmentSheet(true)}
+                onClick={() => setOpenEquipmentAttachmentModal(true)}
                 className="hover:bg-primary/20 group flex w-full cursor-pointer items-center justify-between border-b px-2 py-1 transition duration-200 xl:px-4 xl:py-2"
               >
                 <div className="flex items-center gap-2">
@@ -60,10 +60,10 @@ export function Attachments() {
           </div>
         </div>
       </div>
-      {openEquipmentAttachmentSheet && (
-        <EquipmentAttachmentSheet
-          open={openEquipmentAttachmentSheet}
-          onClose={() => setOpenEquipmentAttachmentSheet(false)}
+      {openEquipmentAttachmentModal && (
+        <EquipmentAttachmentModal
+          open={openEquipmentAttachmentModal}
+          onClose={() => setOpenEquipmentAttachmentModal(false)}
         />
       )}
     </>

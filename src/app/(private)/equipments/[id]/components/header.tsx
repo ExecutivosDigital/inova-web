@@ -1,6 +1,12 @@
 "use client";
 import { EquipmentsProps } from "@/@types/equipments";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ChevronLeft, Edit, LayersIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -29,10 +35,25 @@ export function Header({ selectedEquipment }: HeaderProps) {
           />
           <span className="font-bold xl:text-xl">{selectedEquipment.name}</span>
         </div>
-        <Button className="h-max gap-2 p-1 text-white">
-          <Edit className="h-4" />{" "}
-          <span className="hidden xl:block">Editar Equipamento</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="h-max gap-2 p-2 text-white">
+              <Edit className="h-4" />{" "}
+              <span className="hidden xl:block">Ações</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" side="left">
+            <DropdownMenuItem>
+              <span>Criar OS</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <span>Editar Equipamento</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <span>Excluir Equipamento</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </>
   );

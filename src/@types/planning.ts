@@ -1,9 +1,9 @@
 export interface PlanningProps {
   id: number;
-  os: string;
-  amount: string;
-  startDate: string;
-  worker: string;
+  area: string;
+  service: string;
   eqp: string;
-  status: string;
+  worker: string;
+  startDate: string;
+  endDate: string;
 }

@@ -78,7 +78,7 @@ export function ProgrammingTable() {
             className="bg-primary hover:bg-primary-dark flex cursor-pointer items-center gap-2 rounded-md px-4 py-2 font-semibold text-white transition duration-200"
           >
             <Plus />
-            <span>Novo Planejamento de Rota</span>
+            <span>Novo Planejamento de OS</span>
           </button>
         </div>
         <Table>
@@ -101,32 +101,32 @@ export function ProgrammingTable() {
                 onClick={() => setOpenRouteProgramSheet(true)}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.os}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {/* {plan.os} */}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
-                  {plan.amount}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {/* {plan.amount} */}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.startDate}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.worker}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.eqp}
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   <Info
                     className={cn(
                       "mx-auto",
-                      plan.status === "finished"
-                        ? "text-green-500"
-                        : "text-amber-500",
+                      // plan.status === "finished"
+                      //   ? "text-green-500"
+                      //   : "text-amber-500",
                     )}
                   />
                 </TableCell>
-                <TableCell className="py-0.5 text-sm font-medium whitespace-nowrap text-white">
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
                   <div className="bg-primary hover:bg-primary-dark mx-auto w-max cursor-pointer rounded-md p-1 transition duration-200">
                     <Eye />
                   </div>

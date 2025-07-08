@@ -6,27 +6,33 @@
 
   --color-primary: #ed6842;
   --color-primary-dark: #ff5c25;
+}
 
-  /* --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
+@layer utilities {
+  .fade-in {
+    animation: var(--animate-in);
   }
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  } */
+  .fade-out {
+    animation: var(--animate-out);
+  }
+  .accordion-down {
+    animation: var(--animate-accordion-down);
+  }
+  .accordion-up {
+    animation: var(--animate-accordion-up);
+  }
+  .slide-in {
+    animation: var(--animate-slide-in);
+  }
+  .slide-out {
+    animation: var(--animate-slide-out);
+  }
+  .slide-out-to-left {
+    animation: var(--animate-slide-out-to-left);
+  }
+  .slide-in-from-left {
+    animation: var(--animate-slide-in-from-left);
+  }
 }
 
 .swiper-slide {

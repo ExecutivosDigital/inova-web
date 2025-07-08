@@ -22,7 +22,7 @@ export function Kpis() {
     },
     {
       value: "behind",
-      text: "OS Atrasadas",
+      text: "OS Fin. com Atraso",
       total: "4",
       color: "info",
     },

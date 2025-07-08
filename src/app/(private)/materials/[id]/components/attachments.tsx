@@ -4,12 +4,12 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import MaterialAttachmentSheet from "./MaterialAttachmentSheet";
+import MaterialAttachmentModal from "./MaterialAttachmentModal";
 
 export function Attachments() {
   const [materialPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openMaterialAttachmentSheet, setOpenMaterialAttachmentSheet] =
+  const [openMaterialAttachmentModal, setOpenMaterialAttachmentModal] =
     useState<boolean>(false);
 
   return (
@@ -32,7 +32,7 @@ export function Attachments() {
             {Array.from({ length: 10 }).map((_, i) => (
               <div
                 key={i}
-                onClick={() => setOpenMaterialAttachmentSheet(true)}
+                onClick={() => setOpenMaterialAttachmentModal(true)}
                 className="hover:bg-primary/20 group flex w-full cursor-pointer items-center justify-between border-b px-2 py-1 transition duration-200 xl:px-4 xl:py-2"
               >
                 <div className="flex items-center gap-2">
@@ -60,10 +60,10 @@ export function Attachments() {
           </div>
         </div>
       </div>
-      {openMaterialAttachmentSheet && (
-        <MaterialAttachmentSheet
-          open={openMaterialAttachmentSheet}
-          onClose={() => setOpenMaterialAttachmentSheet(false)}
+      {openMaterialAttachmentModal && (
+        <MaterialAttachmentModal
+          open={openMaterialAttachmentModal}
+          onClose={() => setOpenMaterialAttachmentModal(false)}
         />
       )}
     </>

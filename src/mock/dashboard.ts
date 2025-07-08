@@ -53,7 +53,7 @@ export const dashboardOs: DashboardOsProps[] = [
     os: "123456-A",
     executed: "01/05/2025 14:30",
     spent: "5h 25m 37s",
-    status: "finished",
+    status: "delayed",
   },
   {
     id: 7,
@@ -62,7 +62,7 @@ export const dashboardOs: DashboardOsProps[] = [
     os: "123456-A",
     executed: "01/05/2025 14:30",
     spent: "5h 25m 37s",
-    status: "finished",
+    status: "delayed",
   },
   {
     id: 8,
@@ -71,7 +71,7 @@ export const dashboardOs: DashboardOsProps[] = [
     os: "123456-A",
     executed: "01/05/2025 14:30",
     spent: "5h 25m 37s",
-    status: "finished",
+    status: "delayed",
   },
   {
     id: 9,

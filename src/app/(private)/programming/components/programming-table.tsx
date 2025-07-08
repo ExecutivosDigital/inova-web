@@ -1,4 +1,5 @@
 "use client";
+import { ProgrammingProps } from "@/@types/programming";
 import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
@@ -14,7 +15,7 @@ import { Eye, Plus, Search } from "lucide-react";
 import moment from "moment";
 import { useState } from "react";
 import { NewRouteProgramModal } from "./NewRouteProgramModal";
-import { RouteProgramSheet } from "./RouteProgramSheet";
+import { RouteProgramModal } from "./RouteProgramModal";
 
 export function ProgrammingTable() {
   const columns = [
@@ -29,7 +30,10 @@ export function ProgrammingTable() {
 
   const [planningPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [openRouteProgramSheet, setOpenRouteProgramSheet] =
+  const [selectedRoute, setSelectedRoute] = useState<ProgrammingProps | null>(
+    null,
+  );
+  const [openRouteProgramModal, setOpenRouteProgramModal] =
     useState<boolean>(false);
   const [openNewRouteProgramModal, setOpenNewRouteProgramModal] =
     useState<boolean>(false);
@@ -135,10 +139,14 @@ export function ProgrammingTable() {
           pages={planningPages}
         />
       </div>
-      {openRouteProgramSheet && (
-        <RouteProgramSheet
-          open={openRouteProgramSheet}
-          onClose={() => setOpenRouteProgramSheet(false)}
+      {selectedRoute && (
+        <RouteProgramModal
+          open={openRouteProgramModal}
+          onClose={() => {
+            setOpenRouteProgramModal(false);
+            setSelectedRoute(null);
+          }}
+          selectedRoute={selectedRoute}
         />
       )}
       {openNewRouteProgramModal && (

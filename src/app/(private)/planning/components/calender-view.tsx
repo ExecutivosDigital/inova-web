@@ -36,16 +36,9 @@ const CalendarView = () => {
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
   const [selectedOs, setSelectedOs] = useState<PlanningProps | null>(null);
   const [selectedOsId, setSelectedOsId] = useState<string | null>(null);
-  const [calendarEvents, setCalendarEvents] = useState<CalendarEventsProps[]>([
-    {
-      id: "1",
-      title: "OS 1",
-      start: new Date(),
-      end: new Date(),
-      allDay: true,
-      calendar: "outlook",
-    },
-  ]);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEventsProps[]>(
+    [],
+  );
   const isLg = useMediaQuery("(min-width: 1024px)");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,10 +61,7 @@ const CalendarView = () => {
       <>
         <div
           className={cn(
-            "text-primary relative flex h-full min-h-[40px] w-full gap-2 overflow-x-hidden rounded-md border p-2 font-semibold",
-            eventInfo.event.extendedProps.calendar === "outlook"
-              ? "bg-primary text-white"
-              : "border-primary bg-white text-black",
+            "text-primary border-primary relative flex h-full min-h-[40px] w-full cursor-pointer gap-2 overflow-x-hidden rounded-md border bg-white p-2 font-semibold",
             eventInfo.view.type === "dayGridMonth" && "truncate",
           )}
         >
@@ -289,7 +279,10 @@ const CalendarView = () => {
       {selectedOs && (
         <OsPlanSheet
           open={openOsPlanSheet}
-          onClose={() => setOpenOsPlanSheet(false)}
+          onClose={() => {
+            setOpenOsPlanSheet(false);
+            setSelectedOs(null);
+          }}
           selectedOs={selectedOs}
         />
       )}

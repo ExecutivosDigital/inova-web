@@ -1,4 +1,8 @@
 export interface PlanningProps {
+  area: {
+    id: string;
+    name: string;
+  };
   id: string;
   eqp: {
     id: string;
@@ -17,7 +21,6 @@ export interface PlanningProps {
       name: string;
     }[];
   };
-
   startDate: Date;
   endDate: Date;
   worker: { value: string; label: string }[];

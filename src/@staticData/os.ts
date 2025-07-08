@@ -1,3 +1,46 @@
+export const Areas = [
+  {
+    id: "1",
+    name: "Área Tal 1",
+  },
+  {
+    id: "2",
+    name: "Área Tal 2",
+  },
+  {
+    id: "3",
+    name: "Área Tal 3",
+  },
+  {
+    id: "4",
+    name: "Área Tal 4",
+  },
+  {
+    id: "5",
+    name: "Área Tal 5",
+  },
+  {
+    id: "6",
+    name: "Área Tal 6",
+  },
+  {
+    id: "7",
+    name: "Área Tal 7",
+  },
+  {
+    id: "8",
+    name: "Área Tal 8",
+  },
+  {
+    id: "9",
+    name: "Área Tal 9",
+  },
+  {
+    id: "10",
+    name: "Área Tal 10",
+  },
+];
+
 export const Equipments = [
   {
     id: "1",

@@ -504,26 +504,16 @@ export function NewRouteProgramModal({
     setSeeSummary(true);
   }
 
-  const parseTimeString = (timeStr: string): number => {
-    const match = timeStr.match(/(\d+)h:(\d+)m/);
-    if (!match) return 0;
-
-    const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-
-    return hours + minutes / 60; // Convert to decimal hours
-  };
-
-  const calculateTotalEstimatedTime = () => {
-    return planningList
+  const test = (planningList: PlanningProps[]) => {
+    const totalHours = planningList
       .filter((os) => os.selected)
       .reduce((total, os) => {
-        const estTime = parseTimeString(os.eqp.service.est);
-        return total + estTime;
+        return (
+          (total + moment(os.endDate).diff(moment(os.startDate), "minutes")) /
+          60
+        );
       }, 0);
-  };
 
-  const formatTotalTime = (totalHours: number): string => {
     const hours = Math.floor(totalHours);
     const minutes = Math.round((totalHours - hours) * 60);
     return `${hours}h:${minutes.toString().padStart(2, "0")}m`;
@@ -655,10 +645,29 @@ export function NewRouteProgramModal({
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col gap-1">
-                    <span>
-                      Tempo total estimado:{" "}
-                      {formatTotalTime(calculateTotalEstimatedTime())}
-                    </span>
+                    <span>Tempo total estimado: {test(planningList)}</span>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem
+                className="rounded-lg border border-zinc-400 shadow-none"
+                value="5"
+                onClick={() => setSelectedOsStep(5)}
+              >
+                <AccordionTrigger arrow>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="text-primary flex items-center gap-2 text-base font-bold md:gap-4 md:text-2xl">
+                      <div className="flex flex-col">
+                        <span className="leading-6">Responsáveis</span>
+                      </div>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="flex flex-col gap-1">
+                    {form.getValues("workers").map((w) => (
+                      <span key={w.value}>{w.label}</span>
+                    ))}
                   </div>
                 </AccordionContent>
               </AccordionItem>

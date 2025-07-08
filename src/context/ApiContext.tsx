@@ -6,7 +6,7 @@ import { createContext, useContext } from "react";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-interface ApiContextProps {
+export interface ApiContextProps {
   PostAPI: (
     url: string,
     data: unknown,
@@ -25,8 +25,8 @@ interface ApiContextProps {
     url: string,
     auth: boolean,
   ) => Promise<{ status: number; body: any }>;
-  IBGEAPI: (url: string) => Promise<{ status: number; body: any }>;
-  token: string | undefined;
+  token: string;
+  clearToken: () => void;
   cookies: Cookies;
 }
 
@@ -40,13 +40,11 @@ export const ApiContextProvider = ({ children }: ProviderProps) => {
   const cookies = useCookies();
 
   const token = cookies.get(process.env.NEXT_PUBLIC_USER_TOKEN as string);
-
+  function clearToken() {
+    cookies.remove(process.env.NEXT_PUBLIC_USER_TOKEN as string);
+  }
   const api = axios.create({
     baseURL,
-  });
-
-  const IBGE = axios.create({
-    baseURL: "https://servicodados.ibge.gov.br/api/v1/localidades/",
   });
 
   function config(auth: boolean) {
@@ -57,33 +55,6 @@ export const ApiContextProvider = ({ children }: ProviderProps) => {
       },
     };
   }
-
-  const IBGEAPI = async (url: string) => {
-    const connect = await IBGE.get(url)
-      .then(({ data }) => {
-        return {
-          status: 200,
-          body: data,
-        };
-      })
-      .catch((err) => {
-        const message = err.response.data;
-        const status = err.response.status;
-        return { status, body: message };
-      });
-
-    return connect.status === 500
-      ? {
-          status: connect.status,
-          body: "Ops! algo deu errado, tente novamente",
-        }
-      : connect.status === 413
-        ? {
-            status: connect.status,
-            body: "Ops! algo deu errado, tente novamente ou escolha outra imagem",
-          }
-        : connect;
-  };
 
   async function PostAPI(url: string, data: unknown, auth: boolean) {
     const connect = await api
@@ -180,12 +151,12 @@ export const ApiContextProvider = ({ children }: ProviderProps) => {
   return (
     <ApiContext.Provider
       value={{
+        token: token ? token : "",
         PostAPI,
         GetAPI,
+        clearToken,
         PutAPI,
-        token,
         DeleteAPI,
-        IBGEAPI,
         cookies,
       }}
     >

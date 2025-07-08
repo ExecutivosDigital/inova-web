@@ -1,4 +1,4 @@
-import { Equipments, Services, Workers } from "@/@staticData/os";
+import { Areas, Equipments, Services, Workers } from "@/@staticData/os";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -74,6 +74,10 @@ const colorStyles: StylesConfig = {
 };
 
 const FormSchema = z.object({
+  area: z.object({
+    id: z.string().min(1, "Selecione uma área"),
+    name: z.string(),
+  }),
   eqp: z.object({
     id: z.string().min(1, "Selecione um equipamento"),
     name: z.string(),
@@ -128,6 +132,7 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
     resolver: zodResolver(FormSchema),
     mode: "onChange",
     defaultValues: {
+      area: { id: "", name: "" },
       eqp: { id: "", name: "" },
       service: { id: "", name: "" },
       startDate: moment().add(1, "hour").startOf("hour").toDate(),
@@ -140,7 +145,7 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
     const [activeStep, setActiveStep] = useState(0);
 
     const stepFields = {
-      0: ["eqp", "service", "startDate", "endDate", "workers"] as const,
+      0: ["area", "eqp", "service", "startDate", "endDate", "workers"] as const,
     };
 
     const validateStep = async (step: number) => {
@@ -161,6 +166,7 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
       const errors = form.formState.errors;
 
       const fieldLabels = {
+        area: "Área",
         eqp: "Equipamentos",
         service: "Serviços",
         startDate: "Data de Início",
@@ -202,6 +208,7 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
   useEffect(() => {
     if (open) {
       form.reset({
+        area: { id: "", name: "" },
         eqp: { id: "", name: "" },
         service: { id: "", name: "" },
         startDate: moment().add(1, "hour").startOf("hour").toDate(),
@@ -214,6 +221,7 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
   useEffect(() => {
     if (!open) {
       form.reset({
+        area: { id: "", name: "" },
         eqp: { id: "", name: "" },
         service: { id: "", name: "" },
         startDate: moment().add(1, "hour").startOf("hour").toDate(),
@@ -241,6 +249,93 @@ export function NewOsPlanSheet({ open, onClose }: NewOsPlanSheetProps) {
                   <div className="h-[calc(100vh-200px)]">
                     <ScrollArea className="h-full">
                       <div className="space-y-4 px-6 pb-5">
+                        <FormField
+                          key="area"
+                          control={form.control}
+                          name="area"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Área</FormLabel>
+                              <FormControl>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <div className="flex cursor-pointer items-center justify-between rounded-lg border border-zinc-400 px-2 py-1">
+                                      <span
+                                        className={cn(
+                                          field.value.name === "" &&
+                                            "text-zinc-400",
+                                        )}
+                                      >
+                                        {field.value.name ||
+                                          "Selecione uma Área"}
+                                      </span>
+                                      <ChevronDown />
+                                    </div>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent
+                                    align="end"
+                                    className="z-[9999]"
+                                  >
+                                    <Command
+                                      className="z-[99999]"
+                                      filter={(value, search) => {
+                                        if (
+                                          value
+                                            .toLowerCase()
+                                            .normalize("NFD")
+                                            .replace(/[\u0300-\u036f]/g, "")
+                                            .includes(search.toLowerCase())
+                                        )
+                                          return 1;
+                                        return 0;
+                                      }}
+                                    >
+                                      <CommandInput placeholder="Pesquisar..." />
+                                      <CommandEmpty>
+                                        Não encontrado.
+                                      </CommandEmpty>
+                                      {Areas.sort((a, b) =>
+                                        a.name.localeCompare(b.name),
+                                      ).map((area, index) => (
+                                        <CommandItem
+                                          key={`area-${index}`}
+                                          value={area.name}
+                                          onSelect={() => {
+                                            field.onChange({
+                                              id: area.id,
+                                              name: area.name,
+                                            });
+                                          }}
+                                          className={cn(
+                                            "hover:bg-primary/20 pointer-events-auto flex w-full cursor-pointer items-center justify-between transition duration-200",
+                                            field.value.name === area.name &&
+                                              "bg-primary/20",
+                                          )}
+                                        >
+                                          {area.name}
+                                          <Check
+                                            className={cn("mr-2 h-4 w-4", {
+                                              "opacity-100":
+                                                field.value.name === area.name,
+                                              "opacity-0":
+                                                field.value.name !== area.name,
+                                            })}
+                                          />
+                                        </CommandItem>
+                                      ))}
+                                    </Command>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </FormControl>
+                              {form.formState.errors.area?.id && (
+                                <p className="mt-1 text-sm text-rose-500">
+                                  {form.formState.errors.area.id.message}
+                                </p>
+                              )}
+                            </FormItem>
+                          )}
+                        />
+
                         <FormField
                           key="eqp"
                           control={form.control}

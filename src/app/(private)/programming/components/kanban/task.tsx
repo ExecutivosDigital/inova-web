@@ -1,24 +1,22 @@
 "use client";
-import React from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 // dnd
+import { ProgrammingProps } from "@/@types/programming";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Proposal } from "./DndKitGuide";
 
 interface TaskProps {
-  client: Proposal;
-  setOpenEditSheet?: (value: Proposal) => void;
-  setSelectedClientId?: React.Dispatch<React.SetStateAction<string | null>>;
+  route: ProgrammingProps;
+  onClick: () => void;
 }
 
-const Task = ({ client, setOpenEditSheet }: TaskProps) => {
+const Task = ({ route, onClick }: TaskProps) => {
   // dnd
   const { listeners, transform, transition, isDragging } = useSortable({
-    id: client.id,
+    id: route.id,
     data: {
       type: "item",
     },
@@ -32,7 +30,6 @@ const Task = ({ client, setOpenEditSheet }: TaskProps) => {
           transition,
           transform: CSS.Translate.toString(transform),
         }}
-        onClick={() => setOpenEditSheet && setOpenEditSheet({ ...client })}
         className={cn(
           "group border-default-300 bg-default-100 relative cursor-pointer p-2 shadow",
           {
@@ -40,10 +37,10 @@ const Task = ({ client, setOpenEditSheet }: TaskProps) => {
           },
         )}
       >
-        <CardContent className="p-0">
+        <CardContent className="p-0" onClick={onClick}>
           <div className="relative">
-            <div className="text-default-700 my-1 text-sm font-semibold capitalize">
-              {client.name}
+            <div className="my-1 text-sm font-semibold capitalize">
+              Rota {route.id}
             </div>
           </div>
           {/* 

@@ -24,9 +24,12 @@ import {
 // Components
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
+import { ProgrammingProps } from "@/@types/programming";
 import { useApiContext } from "@/context/ApiContext";
+import { ProgrammingList } from "@/mock/programming";
+import moment from "moment";
 import { NewRouteProgramModal } from "../NewRouteProgramModal";
-import { RouteProgramSheet } from "../RouteProgramSheet";
+import { RouteProgramModal } from "../RouteProgramModal";
 import Board from "./board";
 import Task from "./task";
 import TaskHeader from "./task-header";
@@ -45,56 +48,14 @@ interface User {
 export interface Users {
   users: User[];
 }
-export interface Proposal {
-  allServicesValue: null | string;
-  architectureAnd3dValue: null | string;
-  architectureValue: null | string;
-  callDate: string; // e.g., "2025-05-28T04:00:00.000Z"
-  callTime: string; // e.g., "14:00"
-  capacity: string; // e.g., "ENTRE 100 E 200 PESSOAS"
-  churchHeight: string;
-  churchName: string;
-  churchWidth: string;
-  city: string; // e.g., "Érico Cardoso"
-  client: null | string;
-  country: string; // e.g., "Brasil"
-  createdAt: string; // e.g., "2025-05-28T18:46:40.656Z"
-  description: string;
-  expectedProjectValue: string; // e.g., "ENTRE 15 E 30 MIL REAIS"
-  expirationDate: null | string;
-  goal: string; // e.g., "Contruir"
-  proposalTypeId?: string;
-  proposalStatusId?: string;
-  haveOtherProposals: boolean;
-  id: string; // e.g., "7ffa5d50-d9f5-4de4-91df-9f4b28d3457d"
-  lastName: string;
-  name: string;
-  phone: string; // e.g., "(56) 6666-6666"
-  proposalStatus: {
-    color: string; // e.g., "#0000"
-    id: string; // e.g., "c898767a-60fd-4712-bf37-be23fc88033d"
-    name: string; // e.g., "Não enviada"
-    position: number;
-  };
-  proposalLink: string;
-  proposalType: {
-    color: string; // e.g., "#00000"
-    description: string; // e.g., "TENHO UM TERRENO E QUERO CONSTRUIR UMA IGREJA."
-    id: string; // e.g., "1cdba644-a54e-4d13-ab96-2e59ed91085a"
-    name: string; // e.g., "Contruir"
-  };
-  role: string; // e.g., "Pastor"
-  state: string; // e.g., "Bahia"
-  targetValue: string; // e.g., "ATÉ 300 MIL"
-  updatedAt: string; // e.g., "2025-05-28T18:46:40.657Z"
-}
+
 export interface Boards {
   color: string;
   id: string;
   name: string;
   pages: number;
   position: number;
-  proposals: Proposal[];
+  routes: ProgrammingProps[];
 }
 export default function DnDKitGuide() {
   const { PutAPI } = useApiContext();
@@ -105,7 +66,7 @@ export default function DnDKitGuide() {
       name: "Segunda",
       pages: 1,
       position: 1,
-      proposals: [],
+      routes: [],
     },
     {
       color: "#ed6842",
@@ -113,7 +74,58 @@ export default function DnDKitGuide() {
       name: "Terça",
       pages: 1,
       position: 2,
-      proposals: [],
+      routes: [
+        {
+          id: "1",
+          workers: [
+            {
+              value: "Gabriel",
+              label: "Gabriel",
+            },
+          ],
+          selectedOss: [
+            {
+              area: {
+                id: "1",
+                name: "Área 1",
+              },
+              id: "1",
+              eqp: {
+                id: "1",
+                name: "Equipamento 1",
+                service: {
+                  id: "1",
+                  name: "Serviço 1",
+                  est: "1h:30m",
+                },
+                materials: [
+                  {
+                    id: "1",
+                    name: "Material 1",
+                  },
+                ],
+                tools: [
+                  {
+                    id: "1",
+                    name: "Ferramenta 1",
+                  },
+                ],
+              },
+              startDate: moment().add(1, "hour").startOf("hour").toDate(),
+              endDate: moment().add(2, "hour").startOf("hour").toDate(),
+              worker: [
+                {
+                  value: "Gabriel",
+                  label: "Gabriel",
+                },
+              ],
+              selected: true,
+            },
+          ],
+          startDate: moment().add(1, "hour").startOf("hour").toDate(),
+          endDate: moment().add(2, "hour").startOf("hour").toDate(),
+        },
+      ],
     },
     {
       color: "#ed6842",
@@ -121,7 +133,7 @@ export default function DnDKitGuide() {
       name: "Quarta",
       pages: 1,
       position: 3,
-      proposals: [],
+      routes: [],
     },
     {
       color: "#ed6842",
@@ -129,7 +141,7 @@ export default function DnDKitGuide() {
       name: "Quinta",
       pages: 1,
       position: 4,
-      proposals: [],
+      routes: [],
     },
     {
       color: "#ed6842",
@@ -137,7 +149,7 @@ export default function DnDKitGuide() {
       name: "Sexta",
       pages: 1,
       position: 5,
-      proposals: [],
+      routes: [],
     },
     {
       color: "#ed6842",
@@ -145,7 +157,7 @@ export default function DnDKitGuide() {
       name: "Sábado",
       pages: 1,
       position: 6,
-      proposals: [],
+      routes: [],
     },
     {
       color: "#ed6842",
@@ -153,13 +165,16 @@ export default function DnDKitGuide() {
       name: "Domingo",
       pages: 1,
       position: 7,
-      proposals: [],
+      routes: [],
     },
   ]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [isClientSet] = useState<string | null | boolean>(null);
   const [newClientBoardId, setNewClientBoardId] = useState<string | null>(null);
-  const [openRouteProgramSheet, setOpenRouteProgramSheet] =
+  const [selectedRoute, setSelectedRoute] = useState<ProgrammingProps | null>(
+    null,
+  );
+  const [openRouteProgramModal, setOpenRouteProgramModal] =
     useState<boolean>(false);
   const [openNewRouteProgramModal, setOpenNewRouteProgramModal] =
     useState<boolean>(false);
@@ -171,7 +186,7 @@ export default function DnDKitGuide() {
     }
     if (type === "item") {
       return boards.find((board) =>
-        board.proposals.find((item) => item.id === id),
+        board.routes.find((item) => item.id === id),
       );
     }
   }
@@ -201,7 +216,7 @@ export default function DnDKitGuide() {
 
       const newBoards = boards.map((board) => ({
         ...board,
-        proposals: board.proposals.map((lead) =>
+        routes: board.routes.map((lead) =>
           lead.id === id ? { ...lead, boardId } : lead,
         ),
       }));
@@ -243,17 +258,17 @@ export default function DnDKitGuide() {
       );
 
       // Find the index of the active and over item
-      const activeitemIndex = activeBoard.proposals.findIndex(
+      const activeitemIndex = activeBoard.routes.findIndex(
         (item) => item.id === active.id,
       );
-      const overitemIndex = overBoard.proposals.findIndex(
+      const overitemIndex = overBoard.routes.findIndex(
         (item) => item.id === over.id,
       );
       // In the same board
       if (activeBoardIndex === overBoardIndex) {
         const newItems = [...boards];
-        newItems[activeBoardIndex].proposals = arrayMove(
-          newItems[activeBoardIndex].proposals,
+        newItems[activeBoardIndex].routes = arrayMove(
+          newItems[activeBoardIndex].routes,
           activeitemIndex,
           overitemIndex,
         );
@@ -262,15 +277,11 @@ export default function DnDKitGuide() {
       } else {
         // In different boards
         const newItems = [...boards];
-        const [removeditem] = newItems[activeBoardIndex].proposals.splice(
+        const [removeditem] = newItems[activeBoardIndex].routes.splice(
           activeitemIndex,
           1,
         );
-        newItems[overBoardIndex].proposals.splice(
-          overitemIndex,
-          0,
-          removeditem,
-        );
+        newItems[overBoardIndex].routes.splice(overitemIndex, 0, removeditem);
         setBoards(newItems);
       }
     }
@@ -299,22 +310,21 @@ export default function DnDKitGuide() {
       );
 
       // Find the index of the active and over item
-      const activeitemIndex = activeBoard.proposals.findIndex(
+      const activeitemIndex = activeBoard.routes.findIndex(
         (item) => item.id === active.id,
       );
 
       // Remove the active item from the active board and add it to the over board
       const newItems = [...boards];
-      const [removeditem] = newItems[activeBoardIndex].proposals.splice(
+      const [removeditem] = newItems[activeBoardIndex].routes.splice(
         activeitemIndex,
         1,
       );
-      newItems[overBoardIndex].proposals.push(removeditem);
+      newItems[overBoardIndex].routes.push(removeditem);
       setBoards(newItems);
     }
   };
 
-  // This is the function that handles the sorting of the boards and items when the user is done dragging.
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
@@ -340,18 +350,18 @@ export default function DnDKitGuide() {
         (board) => board.id === overBoard.id,
       );
       // Find the index of the active and over item
-      const activeitemIndex = activeBoard.proposals.findIndex(
+      const activeitemIndex = activeBoard.routes.findIndex(
         (item) => item.id === active.id,
       );
-      const overitemIndex = overBoard.proposals.findIndex(
+      const overitemIndex = overBoard.routes.findIndex(
         (item) => item.id === over.id,
       );
 
       // In the same board
       if (activeBoardIndex === overBoardIndex) {
         const newItems = [...boards];
-        newItems[activeBoardIndex].proposals = arrayMove(
-          newItems[activeBoardIndex].proposals,
+        newItems[activeBoardIndex].routes = arrayMove(
+          newItems[activeBoardIndex].routes,
           activeitemIndex,
           overitemIndex,
         );
@@ -360,15 +370,11 @@ export default function DnDKitGuide() {
       } else {
         // In different boards
         const newItems = [...boards];
-        const [removeditem] = newItems[activeBoardIndex].proposals.splice(
+        const [removeditem] = newItems[activeBoardIndex].routes.splice(
           activeitemIndex,
           1,
         );
-        newItems[overBoardIndex].proposals.splice(
-          overitemIndex,
-          0,
-          removeditem,
-        );
+        newItems[overBoardIndex].routes.splice(overitemIndex, 0, removeditem);
         setBoards(newItems);
       }
     }
@@ -395,16 +401,16 @@ export default function DnDKitGuide() {
         (board) => board.id === overBoard.id,
       );
       // Find the index of the active and over item
-      const activeitemIndex = activeBoard.proposals.findIndex(
+      const activeitemIndex = activeBoard.routes.findIndex(
         (item) => item.id === active.id,
       );
 
       const newItems = [...boards];
-      const [removeditem] = newItems[activeBoardIndex].proposals.splice(
+      const [removeditem] = newItems[activeBoardIndex].routes.splice(
         activeitemIndex,
         1,
       );
-      newItems[overBoardIndex].proposals.push(removeditem);
+      newItems[overBoardIndex].routes.push(removeditem);
       setBoards(newItems);
     }
   }
@@ -419,7 +425,6 @@ export default function DnDKitGuide() {
 
   return (
     <>
-      {/* {!isBoardsLoading ? ( */}
       <Card className="overflow-y-auto">
         <CardHeader className="mb-6 border-none pt-6">
           <TaskHeader
@@ -441,26 +446,33 @@ export default function DnDKitGuide() {
                 {boards.map((board) => (
                   <Board board={board} key={board.id}>
                     <SortableContext
-                      items={board.proposals
+                      items={board.routes
                         .filter((i) =>
                           inputText
-                            ? i.name
+                            ? i.id
                                 .toLowerCase()
                                 .includes(inputText.toLowerCase())
                             : true,
                         )
                         .map((i) => i.id)}
                     >
-                      {board.proposals
+                      {board.routes
                         .filter((i) =>
                           inputText
-                            ? i.name
+                            ? i.id
                                 .toLowerCase()
                                 .includes(inputText.toLowerCase())
                             : true,
                         )
-                        .map((i) => (
-                          <Task client={i} key={i.id} />
+                        .map((route) => (
+                          <Task
+                            key={route.id}
+                            route={route}
+                            onClick={() => {
+                              setOpenRouteProgramModal(true);
+                              setSelectedRoute(route);
+                            }}
+                          />
                         ))}
                     </SortableContext>
                   </Board>
@@ -468,59 +480,28 @@ export default function DnDKitGuide() {
               </div>
             </div>
             <DragOverlay adjustScale={false}>
-              {/* Drag Overlay For item Item */}
               {activeId &&
                 activeId ===
                   boards
-                    .find((b) => b.proposals.some((i) => i.id === activeId))
-                    ?.proposals.find((i) => i.id === activeId)?.id && (
-                  <Task
-                    client={
-                      boards
-                        .find((b) => b.proposals.some((i) => i.id === activeId))
-                        ?.proposals.find((i) => i.id === activeId) ??
-                      ({} as Proposal)
-                    }
-                  />
+                    .find((b) => b.routes.some((i) => i.id === activeId))
+                    ?.routes.find((i) => i.id === activeId)?.id && (
+                  <Task route={ProgrammingList[0]} onClick={() => {}} />
                 )}
             </DragOverlay>
           </DndContext>
         </CardContent>
       </Card>
-      {/* ) : (
-        <Card className="overflow-y-auto">
-          <CardHeader className="mb-6 border-none pt-6">
-            <TaskHeader taskView="kanban" openCreateBoard={openCreateBoard} />
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <div className="flex flex-nowrap gap-6 pb-4">
-                {[0, 1, 2, 3].map((index) => (
-                  <BoardSkeleton key={index}>
-                    {[0, 1, 2].map((index) => (
-                      <TaskSkeleton key={index} />
-                    ))}
-                  </BoardSkeleton>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )} */}
-      {/* {open && (
-        <CreateClient
-          open={open}
-          handleRefresh={() => handleGetProposals()}
-          onClose={closeCreateBoard}
-        />
-      )} */}
-      {openRouteProgramSheet && (
-        <RouteProgramSheet
-          open={openRouteProgramSheet}
-          onClose={() => setOpenRouteProgramSheet(false)}
+
+      {selectedRoute && (
+        <RouteProgramModal
+          open={openRouteProgramModal}
+          onClose={() => {
+            setOpenRouteProgramModal(false);
+            setSelectedRoute(null);
+          }}
+          selectedRoute={selectedRoute}
         />
       )}
-
       {openNewRouteProgramModal && (
         <NewRouteProgramModal
           open={openNewRouteProgramModal}

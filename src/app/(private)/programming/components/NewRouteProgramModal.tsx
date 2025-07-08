@@ -88,6 +88,10 @@ export function NewRouteProgramModal({
   const [selectedOsStep, setSelectedOsStep] = useState(1);
   const [planningList, setPlanningList] = useState<PlanningProps[]>([
     {
+      area: {
+        id: "1",
+        name: "Área 1",
+      },
       id: "1",
       eqp: {
         id: "1",
@@ -121,6 +125,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "2",
+        name: "Área 2",
+      },
       id: "2",
       eqp: {
         id: "2",
@@ -154,6 +162,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "3",
+        name: "Área 3",
+      },
       id: "3",
       eqp: {
         id: "3",
@@ -187,6 +199,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "4",
+        name: "Área 4",
+      },
       id: "4",
       eqp: {
         id: "4",
@@ -220,6 +236,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "5",
+        name: "Área 5",
+      },
       id: "5",
       eqp: {
         id: "5",
@@ -253,6 +273,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "6",
+        name: "Área 6",
+      },
       id: "6",
       eqp: {
         id: "6",
@@ -286,6 +310,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "7",
+        name: "Área 7",
+      },
       id: "7",
       eqp: {
         id: "7",
@@ -319,6 +347,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "8",
+        name: "Área 8",
+      },
       id: "8",
       eqp: {
         id: "8",
@@ -352,6 +384,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "9",
+        name: "Área 9",
+      },
       id: "9",
       eqp: {
         id: "9",
@@ -385,6 +421,10 @@ export function NewRouteProgramModal({
       selected: false,
     },
     {
+      area: {
+        id: "10",
+        name: "Área 10",
+      },
       id: "10",
       eqp: {
         id: "10",

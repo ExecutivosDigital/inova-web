@@ -5,11 +5,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { planningList } from "@/mock/planning";
 import { useMediaQuery } from "@/utils/use-media-query";
 import { EventContentArg } from "@fullcalendar/core";
 import ptBR from "@fullcalendar/core/locales/pt-br";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -19,15 +20,13 @@ import React, { useEffect, useState } from "react";
 import { NewOsPlanSheet } from "./NewOsPlanSheet";
 import { OsPlanSheet } from "./OsPlanSheet";
 
-interface CalendarEventProps {
+interface CalendarEventsProps {
   id: string;
   title: string;
   start: Date;
   end: Date;
   allDay: boolean;
-  extendedProps: {
-    calendar: string;
-  };
+  calendar: string;
 }
 
 const CalendarView = () => {
@@ -35,13 +34,19 @@ const CalendarView = () => {
   const [openNewOsPlanSheet, setOpenNewOsPlanSheet] = useState<boolean>(false);
   const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
-  const [sidebarEvents] = React.useState<CalendarEventProps[] | null>([]);
-  const [selectedOs] = useState<PlanningProps | null>(null);
+  const [selectedOs, setSelectedOs] = useState<PlanningProps | null>(null);
+  const [selectedOsId, setSelectedOsId] = useState<string | null>(null);
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEventsProps[]>([
+    {
+      id: "1",
+      title: "OS 1",
+      start: new Date(),
+      end: new Date(),
+      allDay: true,
+      calendar: "outlook",
+    },
+  ]);
   const isLg = useMediaQuery("(min-width: 1024px)");
-
-  const handleCloseModal = () => {
-    setOpenOsPlanSheet(false);
-  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDateClick = (arg: any) => {
@@ -97,45 +102,27 @@ const CalendarView = () => {
     );
   }
 
-  const [dragEvents] = useState([
-    { title: "Rota 1", id: "123465123612", tag: "business" },
-    { title: "Rota 2", id: "64562346", tag: "business" },
-    { title: "Rota 3", id: "374692348567", tag: "business" },
-  ]);
+  useEffect(() => {
+    const formattedEvents = planningList.map((os) => {
+      return {
+        id: os.id,
+        title: "OS" + os.id,
+        start: new Date(os.startDate),
+        end: new Date(os.endDate),
+        allDay: false,
+        calendar: "outlook",
+      };
+    });
+    setCalendarEvents(formattedEvents);
+  }, []);
 
   useEffect(() => {
-    const draggableEl = document.getElementById("external-events");
-
-    const initDraggable = () => {
-      if (draggableEl) {
-        new Draggable(draggableEl, {
-          itemSelector: ".fc-event",
-          eventData: function (eventEl) {
-            const title = eventEl.getAttribute("title");
-            const id = eventEl.getAttribute("data");
-            const event = dragEvents.find((e) => e.id === id);
-            const tag = event ? event.tag : "";
-            // setPresetName(title ? title : "");
-            return {
-              title: title,
-              id: id,
-              extendedProps: {
-                calendar: tag,
-              },
-            };
-          },
-        });
-      }
-    };
-
-    if (dragEvents.length > 0) {
-      initDraggable();
+    if (selectedOsId) {
+      const os = planningList.find((os) => os.id === selectedOsId);
+      setSelectedOs(os || null);
+      setOpenOsPlanSheet(true);
     }
-
-    return () => {
-      draggableEl?.removeEventListener("mousedown", initDraggable);
-    };
-  }, [dragEvents]);
+  }, [selectedOsId]);
 
   return (
     <>
@@ -159,50 +146,45 @@ const CalendarView = () => {
                 className="w-full rounded-md border border-none p-0"
               />
             </div>
-            {/* <div
-              id="external-events"
-              className="mt-6 space-y-1.5 px-4 lg:mt-2 xl:mt-6"
-            >
-              <p className="text-default-700 pb-2 text-sm font-medium">
-                Arraste os cards para o calendário para planejar uma rota
-              </p>
-              {dragEvents.map((event) => (
-                <ExternalDraggingevent key={event.id} event={event} />
-              ))}
-            </div> */}
             <ScrollArea className="h-80 py-2">
-              {sidebarEvents && sidebarEvents.length !== 0 ? (
-                sidebarEvents.map((item, index) => (
+              {planningList && planningList.length !== 0 ? (
+                planningList.map((item, index) => (
                   <div
-                    // onClick={() => handleEventClick(item.id)}
+                    onClick={() => {
+                      setSelectedOs(item);
+                      setOpenOsPlanSheet(true);
+                    }}
                     className="before:bg-primary hover:bg-primary/10 relative flex cursor-pointer items-center justify-between gap-4 px-2 pl-4 transition duration-100 before:absolute before:top-0 before:left-0 before:h-full before:w-1 hover:-translate-y-0.5 hover:shadow"
                     key={`works-note-${index}`}
                   >
                     <div>
                       <div className="text-default-800 text-xs font-medium lg:text-sm xl:text-base 2xl:text-lg">
-                        {item.title}
+                        OS {item.id}
                       </div>
                       <div className="text-default-500 text-[10px] lg:text-sm">
-                        {new Date(item.start).toLocaleTimeString("pt-BR", {
+                        {new Date(item.startDate).toLocaleTimeString("pt-BR", {
                           hour: "numeric",
                           minute: "numeric",
                         })}{" "}
                         -{" "}
-                        {new Date(item.end).toLocaleTimeString("pt-BR", {
+                        {new Date(item.endDate).toLocaleTimeString("pt-BR", {
                           hour: "numeric",
                           minute: "numeric",
                         })}
                       </div>
                     </div>
                     <button
-                      // onClick={() => setOpenModal(true)}
-                      className="border-primary text-primary hover:bg-primary hover:text-primary h-8 rounded border bg-transparent px-4 text-xs font-semibold transition duration-100 lg:text-sm xl:text-base 2xl:text-lg"
+                      onClick={() => {
+                        setSelectedOs(item);
+                        setOpenOsPlanSheet(true);
+                      }}
+                      className="border-primary text-primary hover:bg-primary h-8 cursor-pointer rounded border bg-transparent px-4 text-xs font-semibold transition duration-100 hover:text-white lg:text-sm xl:text-base 2xl:text-lg"
                     >
                       <span>Abrir</span>
                     </button>
                   </div>
                 ))
-              ) : sidebarEvents && sidebarEvents.length === 0 ? (
+              ) : planningList && planningList.length === 0 ? (
                 <div className="before:bg-primary relative flex items-center justify-between gap-4 px-2 pl-4 transition duration-100 before:absolute before:top-0 before:left-0 before:h-full before:w-1">
                   <div>
                     <div className="text-default-800 text-xs font-medium lg:text-sm xl:text-base 2xl:text-lg">
@@ -221,75 +203,83 @@ const CalendarView = () => {
           <CardContent
             className={cn("dash-tail-calendar h-full", !isLg && "p-0")}
           >
-            {isLg ? (
-              <FullCalendar
-                plugins={[
-                  dayGridPlugin,
-                  timeGridPlugin,
-                  interactionPlugin,
-                  listPlugin,
-                ]}
-                headerToolbar={{
-                  left: "prev,next today",
-                  center: "title",
-                  right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
-                }}
-                // events={calendarEvents}
-                // editable={true}
-                rerenderDelay={10}
-                nowIndicator={true}
-                eventDurationEditable={false}
-                selectable={true}
-                selectMirror={true}
-                // eventReceive={(info) => {
-                //   setOpenNewOsPlanSheet(true);
-                //   setNewSelectedDate(info.event.start);
-                //   info.revert();
-                // }}
-                // droppable={true}
-                weekends={true}
-                eventClassNames={handleClassName}
-                eventContent={RenderEventContent}
-                dateClick={() => setOpenOsPlanSheet(true)}
-                // eventClick={(arg) => handleEventClick(arg.event._def.publicId)}
-                initialView="dayGridMonth"
-                locale={ptBR}
-                noEventsContent={renderNoEventsContent}
-              />
+            {calendarEvents.length === 0 ? (
+              <></>
             ) : (
               <>
-                <FullCalendar
-                  plugins={[
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    listPlugin,
-                  ]}
-                  headerToolbar={{
-                    start: "",
-                    center: "prev,next",
-                    end: "title",
-                  }}
-                  // events={calendarEvents}
-                  // editable={true}
-                  rerenderDelay={10}
-                  nowIndicator={true}
-                  eventDurationEditable={false}
-                  selectable={true}
-                  selectMirror={true}
-                  // droppable={true}
-                  weekends={true}
-                  eventClassNames={handleClassName}
-                  eventContent={RenderEventContent}
-                  dateClick={handleDateClick}
-                  // eventClick={(arg) =>
-                  //   handleEventClick(arg.event._def.publicId)
-                  // }
-                  initialView="dayGridMonth"
-                  locale={ptBR}
-                  viewClassNames={"h-[70vh]"}
-                  noEventsContent={renderNoEventsContent}
-                />
+                {isLg ? (
+                  <FullCalendar
+                    plugins={[
+                      dayGridPlugin,
+                      timeGridPlugin,
+                      interactionPlugin,
+                      listPlugin,
+                    ]}
+                    headerToolbar={{
+                      left: "prev,next today",
+                      center: "title",
+                      right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
+                    }}
+                    events={calendarEvents}
+                    // editable={true}
+                    rerenderDelay={10}
+                    nowIndicator={true}
+                    eventDurationEditable={false}
+                    selectable={true}
+                    selectMirror={true}
+                    // eventReceive={(info) => {
+                    //   setOpenNewOsPlanSheet(true);
+                    //   setNewSelectedDate(info.event.start);
+                    //   info.revert();
+                    // }}
+                    // droppable={true}
+                    weekends={true}
+                    eventClassNames={handleClassName}
+                    eventContent={RenderEventContent}
+                    dateClick={() => setOpenOsPlanSheet(true)}
+                    eventClick={(arg) => {
+                      setSelectedOsId(arg.event.id);
+                    }}
+                    initialView="dayGridMonth"
+                    locale={ptBR}
+                    noEventsContent={renderNoEventsContent}
+                  />
+                ) : (
+                  <>
+                    <FullCalendar
+                      plugins={[
+                        dayGridPlugin,
+                        timeGridPlugin,
+                        interactionPlugin,
+                        listPlugin,
+                      ]}
+                      headerToolbar={{
+                        start: "",
+                        center: "prev,next",
+                        end: "title",
+                      }}
+                      events={calendarEvents}
+                      // editable={true}
+                      rerenderDelay={10}
+                      nowIndicator={true}
+                      eventDurationEditable={false}
+                      selectable={true}
+                      selectMirror={true}
+                      // droppable={true}
+                      weekends={true}
+                      eventClassNames={handleClassName}
+                      eventContent={RenderEventContent}
+                      dateClick={handleDateClick}
+                      eventClick={(arg) => {
+                        setSelectedOsId(arg.event.id);
+                      }}
+                      initialView="dayGridMonth"
+                      locale={ptBR}
+                      viewClassNames={"h-[70vh]"}
+                      noEventsContent={renderNoEventsContent}
+                    />
+                  </>
+                )}
               </>
             )}
           </CardContent>
@@ -299,7 +289,7 @@ const CalendarView = () => {
       {selectedOs && (
         <OsPlanSheet
           open={openOsPlanSheet}
-          onClose={handleCloseModal}
+          onClose={() => setOpenOsPlanSheet(false)}
           selectedOs={selectedOs}
         />
       )}

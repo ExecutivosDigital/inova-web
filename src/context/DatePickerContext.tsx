@@ -17,8 +17,10 @@ interface ProviderProps {
 }
 
 export const DatePickerProvider = ({ children }: ProviderProps) => {
-  const [startDate, setStartDate] = useState(moment().toDate());
-  const [endDate, setEndDate] = useState(moment().subtract(1, "week").toDate());
+  const [startDate, setStartDate] = useState(
+    moment().subtract(1, "week").toDate(),
+  );
+  const [endDate, setEndDate] = useState(moment().toDate());
 
   return (
     <DatePicker.Provider

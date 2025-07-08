@@ -25,7 +25,7 @@ import { EquipmentSheet } from "./equipment-sheet";
 export function OsEquipments() {
   const router = useRouter();
   const columns = [
-    { key: "os", label: "" },
+    { key: "id", label: "Rota" },
     { key: "eqp", label: "Equipamento" },
     { key: "tag", label: "TAG" },
     { key: "service", label: "Serviço" },
@@ -81,7 +81,9 @@ export function OsEquipments() {
                 }}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
-                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap" />
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {equipment.id}
+                </TableCell>
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {equipment.eqp}
                 </TableCell>

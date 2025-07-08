@@ -25,7 +25,7 @@ import {
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import { useApiContext } from "@/context/ApiContext";
-import { NewRouteProgramSheet } from "../NewRouteProgramSheet";
+import { NewRouteProgramModal } from "../NewRouteProgramModal";
 import { RouteProgramSheet } from "../RouteProgramSheet";
 import Board from "./board";
 import Task from "./task";
@@ -139,13 +139,29 @@ export default function DnDKitGuide() {
       position: 5,
       proposals: [],
     },
+    {
+      color: "#ed6842",
+      id: "board-6",
+      name: "Sábado",
+      pages: 1,
+      position: 6,
+      proposals: [],
+    },
+    {
+      color: "#ed6842",
+      id: "board-7",
+      name: "Domingo",
+      pages: 1,
+      position: 7,
+      proposals: [],
+    },
   ]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [isClientSet] = useState<string | null | boolean>(null);
   const [newClientBoardId, setNewClientBoardId] = useState<string | null>(null);
   const [openRouteProgramSheet, setOpenRouteProgramSheet] =
     useState<boolean>(false);
-  const [openNewRouteProgramSheet, setOpenNewRouteProgramSheet] =
+  const [openNewRouteProgramModal, setOpenNewRouteProgramModal] =
     useState<boolean>(false);
 
   // Find the value of the items
@@ -399,11 +415,6 @@ export default function DnDKitGuide() {
     }
   }, [newClientBoardId, activeId, isClientSet]);
 
-  // useEffect(() => {
-  //   setQueryFilter("");
-  //   setSelectedPage(1);
-  // }, []);
-
   const [inputText, setInputText] = useState<string>("");
 
   return (
@@ -412,7 +423,7 @@ export default function DnDKitGuide() {
       <Card className="overflow-y-auto">
         <CardHeader className="mb-6 border-none pt-6">
           <TaskHeader
-            openCreateBoard={() => setOpenNewRouteProgramSheet(true)}
+            openCreateBoard={() => setOpenNewRouteProgramModal(true)}
             setInputText={setInputText}
             inputText={inputText}
           />
@@ -509,10 +520,11 @@ export default function DnDKitGuide() {
           onClose={() => setOpenRouteProgramSheet(false)}
         />
       )}
-      {openNewRouteProgramSheet && (
-        <NewRouteProgramSheet
-          open={openNewRouteProgramSheet}
-          onClose={() => setOpenNewRouteProgramSheet(false)}
+
+      {openNewRouteProgramModal && (
+        <NewRouteProgramModal
+          open={openNewRouteProgramModal}
+          onClose={() => setOpenNewRouteProgramModal(false)}
         />
       )}
     </>

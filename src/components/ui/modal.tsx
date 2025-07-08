@@ -22,7 +22,7 @@ export function Modal({ className, children, isOpen, close }: ModalProps) {
       />
       <div
         className={cn(
-          "border-primary z-[1000] h-[90vh] w-[90%] max-w-[700px] rounded-xl border bg-white p-2 shadow-md xl:p-4",
+          "z-[1000] h-[90vh] w-[95%] rounded-xl border border-zinc-400 bg-white p-2 shadow-md lg:w-[900px] xl:p-4",
           className,
         )}
       >

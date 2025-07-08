@@ -1,4 +1,6 @@
 "use client";
+import { PlanningProps } from "@/@types/planning";
+import { Avatar, AvatarFallback, AvatarGroup } from "@/components/ui/avatar";
 import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
   Table,
@@ -10,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { planningList } from "@/mock/planning";
 import { Eye, Plus, Search } from "lucide-react";
+import moment from "moment";
 import { useState } from "react";
 import { NewOsPlanSheet } from "./NewOsPlanSheet";
 import { OsPlanSheet } from "./OsPlanSheet";
@@ -17,7 +20,7 @@ import { OsPlanSheet } from "./OsPlanSheet";
 export function PlanningTable() {
   const columns = [
     { key: "id", label: "ID" },
-    { key: "area", label: "ÁREA" },
+    // { key: "area", label: "ÁREA" },
     { key: "service", label: "SERVIÇO" },
     { key: "eqp", label: "EQUIPAMENTO" },
     { key: "worker", label: "RESPONSÁVEL" },
@@ -30,6 +33,7 @@ export function PlanningTable() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [newRouteOsSheetOpen, setNewRouteOsSheetOpen] = useState(false);
   const [openOsPlanSheet, setOpenOsPlanSheet] = useState<boolean>(false);
+  const [selectedOs, setSelectedOs] = useState<PlanningProps | null>(null);
 
   return (
     <>
@@ -74,29 +78,51 @@ export function PlanningTable() {
             {planningList.map((plan) => (
               <TableRow
                 key={plan.id}
-                onClick={() => setOpenOsPlanSheet(true)}
+                onClick={() => {
+                  setOpenOsPlanSheet(true);
+                  setSelectedOs(plan);
+                }}
                 className="hover:bg-primary/10 h-10 max-h-10 cursor-pointer text-center transition duration-200"
               >
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.id}
                 </TableCell>
-                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                {/* <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
                   {plan.area}
+                </TableCell> */}
+                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
+                  {plan.eqp.service.name}
                 </TableCell>
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
-                  {plan.service}
+                  {plan.eqp.name}
                 </TableCell>
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
-                  {plan.eqp}
+                  {plan.worker.length > 0 && (
+                    <div className="mx-auto w-max">
+                      <AvatarGroup
+                        max={3}
+                        total={plan.worker.length}
+                        countClass="w-7 h-7"
+                      >
+                        {plan.worker.map((user, i) => (
+                          <Avatar
+                            className="ring-primary ring-offset-primary h-7 w-7 ring-1 ring-offset-[2px]"
+                            key={`avatar-key-${i}`}
+                          >
+                            <AvatarFallback>
+                              {user.label.charAt(0) + user.label.charAt(1)}
+                            </AvatarFallback>
+                          </Avatar>
+                        ))}
+                      </AvatarGroup>
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
-                  {plan.worker}
+                  {moment(plan.startDate).format("DD/MM/YYYY HH:mm")}
                 </TableCell>
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
-                  {plan.startDate}
-                </TableCell>
-                <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap">
-                  {plan.endDate}
+                  {moment(plan.endDate).format("DD/MM/YYYY HH:mm")}
                 </TableCell>
 
                 <TableCell className="py-1.5 text-sm font-medium whitespace-nowrap text-white">
@@ -120,10 +146,11 @@ export function PlanningTable() {
           onClose={() => setNewRouteOsSheetOpen(false)}
         />
       )}
-      {openOsPlanSheet && (
+      {selectedOs && (
         <OsPlanSheet
           open={openOsPlanSheet}
           onClose={() => setOpenOsPlanSheet(false)}
+          selectedOs={selectedOs}
         />
       )}
     </>

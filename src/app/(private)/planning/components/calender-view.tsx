@@ -1,4 +1,5 @@
 "use client";
+import { PlanningProps } from "@/@types/planning";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -15,7 +16,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import ExternalDraggingevent from "./dragging-events";
 import { NewOsPlanSheet } from "./NewOsPlanSheet";
 import { OsPlanSheet } from "./OsPlanSheet";
 
@@ -31,12 +31,12 @@ interface CalendarEventProps {
 }
 
 const CalendarView = () => {
-  const [selectedEventDate] = useState<Date | null>(new Date());
   const [openOsPlanSheet, setOpenOsPlanSheet] = useState<boolean>(false);
   const [openNewOsPlanSheet, setOpenNewOsPlanSheet] = useState<boolean>(false);
   const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
   const [sidebarEvents] = React.useState<CalendarEventProps[] | null>([]);
+  const [selectedOs] = useState<PlanningProps | null>(null);
   const isLg = useMediaQuery("(min-width: 1024px)");
 
   const handleCloseModal = () => {
@@ -159,7 +159,7 @@ const CalendarView = () => {
                 className="w-full rounded-md border border-none p-0"
               />
             </div>
-            <div
+            {/* <div
               id="external-events"
               className="mt-6 space-y-1.5 px-4 lg:mt-2 xl:mt-6"
             >
@@ -169,7 +169,7 @@ const CalendarView = () => {
               {dragEvents.map((event) => (
                 <ExternalDraggingevent key={event.id} event={event} />
               ))}
-            </div>
+            </div> */}
             <ScrollArea className="h-80 py-2">
               {sidebarEvents && sidebarEvents.length !== 0 ? (
                 sidebarEvents.map((item, index) => (
@@ -296,11 +296,11 @@ const CalendarView = () => {
         </Card>
       </div>
 
-      {openOsPlanSheet && (
+      {selectedOs && (
         <OsPlanSheet
           open={openOsPlanSheet}
           onClose={handleCloseModal}
-          selectedDate={selectedEventDate}
+          selectedOs={selectedOs}
         />
       )}
       {newSelectedDate && (

@@ -15,9 +15,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import ExternalDraggingevent from "./dragging-events";
-import { NewRouteProgramSheet } from "./NewRouteProgramSheet";
-import { RouteProgramSheet } from "./RouteProgramSheet";
+import { NewRouteProgramModal } from "./NewRouteProgramModal";
 
 interface CalendarEventProps {
   id: string;
@@ -31,26 +29,11 @@ interface CalendarEventProps {
 }
 
 const CalendarView = () => {
-  const [selectedEventDate] = useState<Date | null>(null);
-  const [newSelectedDate, setNewSelectedDate] = useState<Date | null>(null);
-  const [openRouteProgramSheet, setOpenRouteProgramSheet] =
-    useState<boolean>(false);
-  const [openNewRouteProgramSheet, setOpenNewRouteProgramSheet] =
+  const [openNewRouteProgramModal, setOpenNewRouteProgramModal] =
     useState<boolean>(false);
   const [sidebarDate, setSidebarDate] = React.useState<Date>(new Date());
   const [sidebarEvents] = React.useState<CalendarEventProps[] | null>([]);
   const isLg = useMediaQuery("(min-width: 1024px)");
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDateClick = (arg: any) => {
-    setOpenNewRouteProgramSheet(true);
-    setNewSelectedDate(arg.date);
-  };
-
-  const handleCloseDateClick = () => {
-    setOpenNewRouteProgramSheet(false);
-    setNewSelectedDate(null);
-  };
 
   const handleClassName = () => {
     return "min-h-[40px] border-none transition duration-150 hover:-translate-y-0.5 hover:shadow-sm";
@@ -142,7 +125,7 @@ const CalendarView = () => {
           <CardContent className="h-full p-0">
             <CardHeader className="flex flex-row items-center gap-2 space-y-0 border-none pt-5 lg:gap-1 lg:px-1 lg:pt-2 xl:pt-5">
               <Button
-                onClick={() => handleDateClick({ date: new Date() })}
+                onClick={() => setOpenNewRouteProgramModal(true)}
                 className="m-0 w-full text-white lg:h-max lg:px-2 lg:py-1 lg:text-xs xl:h-9 xl:px-3 xl:py-2 xl:text-sm"
               >
                 <Plus className="h-4 w-4 text-white ltr:mr-1 rtl:ml-1" />
@@ -157,17 +140,7 @@ const CalendarView = () => {
                 className="w-full rounded-md border border-none p-0"
               />
             </div>
-            <div
-              id="external-events"
-              className="mt-6 space-y-1.5 px-4 lg:mt-2 xl:mt-6"
-            >
-              <p className="text-default-700 pb-2 text-sm font-medium">
-                Arraste os cards para o calendário para programar uma rota
-              </p>
-              {dragEvents.map((event) => (
-                <ExternalDraggingevent key={event.id} event={event} />
-              ))}
-            </div>
+
             <ScrollArea className="h-80 py-2">
               {sidebarEvents && sidebarEvents.length !== 0 ? (
                 sidebarEvents.map((item, index) => (
@@ -204,7 +177,7 @@ const CalendarView = () => {
                 <div className="before:bg-primary relative flex items-center justify-between gap-4 px-2 pl-4 transition duration-100 before:absolute before:top-0 before:left-0 before:h-full before:w-1">
                   <div>
                     <div className="text-default-800 text-xs font-medium lg:text-sm xl:text-base 2xl:text-lg">
-                      Nenhuma rota encontrada nesse dia.
+                      Nenhuma OS programada nesse dia.
                     </div>
                   </div>
                 </div>
@@ -248,7 +221,7 @@ const CalendarView = () => {
                 weekends={true}
                 eventClassNames={handleClassName}
                 eventContent={RenderEventContent}
-                dateClick={() => setOpenRouteProgramSheet(true)}
+                // dateClick={() => setOpenRouteProgramSheet(true)}
                 // eventClick={(arg) => handleEventClick(arg.event._def.publicId)}
                 initialView="dayGridMonth"
                 locale={ptBR}
@@ -279,7 +252,7 @@ const CalendarView = () => {
                   weekends={true}
                   eventClassNames={handleClassName}
                   eventContent={RenderEventContent}
-                  dateClick={() => setOpenRouteProgramSheet(true)}
+                  // dateClick={() => setOpenRouteProgramSheet(true)}
                   // eventClick={(arg) =>
                   //   handleEventClick(arg.event._def.publicId)
                   // }
@@ -294,18 +267,10 @@ const CalendarView = () => {
         </Card>
       </div>
 
-      {openRouteProgramSheet && (
-        <RouteProgramSheet
-          open={openRouteProgramSheet}
-          onClose={() => setOpenRouteProgramSheet(false)}
-          selectedDate={selectedEventDate}
-        />
-      )}
-      {newSelectedDate && (
-        <NewRouteProgramSheet
-          open={openNewRouteProgramSheet}
-          onClose={handleCloseDateClick}
-          selectedDate={newSelectedDate}
+      {openNewRouteProgramModal && (
+        <NewRouteProgramModal
+          open={openNewRouteProgramModal}
+          onClose={() => setOpenNewRouteProgramModal(false)}
         />
       )}
     </>

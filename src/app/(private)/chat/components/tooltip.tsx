@@ -9,7 +9,8 @@ const tooltipVariants = cva(
     variants: {
       color: {
         secondary: "border bg-popover text-popover-foreground",
-        primary: "border border-primary bg-primary text-white",
+        primary:
+          "border border-secondary bg-secondary text-secondary-foreground",
         warning: "border border-warning bg-warning text-warning-foreground",
         info: "border border-info bg-info text-info-foreground",
         success: "border border-success bg-success text-success-foreground",
@@ -35,12 +36,13 @@ interface TolTipProps
     | "destructive";
 }
 
-const TooltipProvider = ({
-  delayDuration = 0,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>) => (
-  <TooltipPrimitive.Provider {...props} delayDuration={delayDuration} />
-);
+const TooltipProvider = React.forwardRef<
+  React.ComponentRef<typeof TooltipPrimitive.Provider>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+>(({ delayDuration = 0, ...props }, ref) => (
+  <TooltipPrimitive.Provider delayDuration={delayDuration} {...props} />
+));
 TooltipProvider.displayName = TooltipPrimitive.Provider.displayName;
 
 const Tooltip = TooltipPrimitive.Root;
